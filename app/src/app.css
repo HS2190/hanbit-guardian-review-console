@@ -144,33 +144,43 @@ main { padding: var(--iris-space-24); }
 /* 오른쪽은 면이 아니라 캔버스다 — 그 위에 흰 덩이(상단 정보 · 적용 정책 · 절 · 판정)가 뜬다 */
 .preview { background: transparent; border: 0; border-radius: 0; padding: 0; }
 
-/* 상단 정보 — 하나의 흰 덩이 */
+/* 상단 정보 — 스크롤해도 붙어 있는다. 아래 정보만 지나간다 */
 .detail-head {
+  position: sticky; top: 0; z-index: 3;
   background: var(--iris-semantic-background-normal-normal);
   border: 1px solid var(--iris-semantic-line-normal-normal);
   border-radius: var(--iris-radius-lg);
   padding: var(--iris-space-20) var(--iris-space-24);
 }
-/* ── 상단 정보 아래는 전부 한 덩이 ──────────────────────────
-   적용 정책 · 절 · 판정이 따로 떠 있으면 카드가 여섯 장 흩어져 보인다.
-   하나의 흰 면으로 묶고, 안에서는 선으로만 가른다. */
-.summary {
-  margin-top: var(--iris-space-16);
-  border-bottom: 0 !important;
-  border-radius: var(--iris-radius-lg) var(--iris-radius-lg) 0 0 !important;
+/* 아래 16 틈으로 내용이 비쳐 지나가지 않게 캔버스 색으로 덮는다 */
+.detail-head::after {
+  content: ''; position: absolute; left: -1px; right: -1px; top: 100%;
+  height: var(--iris-space-16);
+  background: var(--iris-semantic-background-normal-alternative);
 }
-.summary > [class*="iris-body-"] { padding: var(--iris-space-20) var(--iris-space-24); }
+/* ── 적용 정책 ──────────────────────────────────────────────
+   산정·다음 행동을 좁혀서 아래 판정 열과 폭을 맞춘다. 두 칸이 150 + 틈 16이면
+   본문이 1fr인 한 화면 폭과 무관하게 판정 열의 왼쪽 모서리와 정확히 떨어진다. */
+.summary { margin-top: var(--iris-space-16); }
+.summary > [class*="iris-body-"] {
+  grid-template-columns: minmax(0, 1fr) 150px 150px;
+  column-gap: var(--iris-space-16);
+  padding: var(--iris-space-20) var(--iris-space-24);
+}
 
 .detail-body {
-  background: var(--iris-semantic-background-normal-normal);
-  border: 1px solid var(--iris-semantic-line-normal-normal);
-  /* 덩이 안에서 적용 정책과 그 아래를 가르는 한 줄 */
-  border-top: 1px solid var(--iris-semantic-line-normal-alternative);
-  border-radius: 0 0 var(--iris-radius-lg) var(--iris-radius-lg);
-  overflow: hidden;
+  background: transparent; border: 0; border-radius: 0;
+  align-items: start;
 }
 /* 덩이 안의 절은 카드가 아니라 선으로 갈린다 */
-.detail-main { padding: var(--iris-space-8) var(--iris-space-24) var(--iris-space-20); gap: 0; }
+/* 본문은 한 덩이 — 절은 카드가 아니라 선으로 갈린다 */
+.detail-main {
+  background: var(--iris-semantic-background-normal-normal);
+  border: 1px solid var(--iris-semantic-line-normal-normal);
+  border-radius: var(--iris-radius-lg);
+  padding: var(--iris-space-8) var(--iris-space-24) var(--iris-space-20);
+  gap: 0;
+}
 .detail-main > .card,
 .detail-main > .rail,
 .detail-main > .rail-acc {
@@ -181,20 +191,17 @@ main { padding: var(--iris-space-24); }
 .detail-main > .card > [class*="iris-body-"],
 .detail-main > .rail > [class*="iris-body-"] { padding: var(--iris-space-16) 0; }
 
-/* 행동 열만 한 단계 눌러 앉힌다 — 정보가 아니라 할 일이라는 표시 */
+/* 판정은 흰 카드로 오른쪽 위에 — 고정된 상단 정보 아래에 붙어 따라온다 */
 .panel-col {
-  background: var(--iris-semantic-fill-normal);
-  border-left: 1px solid var(--iris-semantic-line-normal-normal);
+  background: transparent; border: 0;
+  position: sticky; top: calc(var(--head-h, 148px) + var(--iris-space-16));
 }
-.panel { border: 0 !important; border-radius: 0 !important; background: transparent !important; }
 .panel > [class*="iris-body-"] { padding: var(--iris-space-20) var(--iris-space-24); }
 
 /* 판정 패널을 본문 오른쪽 고정 열로 */
-.detail-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 0; align-items: stretch; margin-top: 0; }
+.detail-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: var(--iris-space-16); align-items: start; margin-top: var(--iris-space-16); }
 .detail-main { min-width: 0; }
-/* 패널이 스크롤을 따라오려면 감싸는 열이 행 높이만큼 늘어나 있어야 한다 */
-.panel-col { position: relative; }
-.detail-body .panel { margin-top: 0; position: sticky; top: 0; }
+.detail-body .panel { margin-top: 0; }
 
 /* 큐 12열 보조 표기 */
 .pol { display: inline-flex; flex-direction: column; gap: var(--iris-space-2); font-size: var(--iris-font-size-label-2); }

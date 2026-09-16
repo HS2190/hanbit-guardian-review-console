@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, Card, Divider, ListCell, Radio, SectionHeader, SectionMessage, Select, Table, TextButton, TextField } from '@hs2190.an/iris-react';
 import { useStore } from '../store/store';
 import { appliedPolicy, currentPolicy } from '../domain/policy';
@@ -21,9 +21,22 @@ export function Detail({ r, onConfirm, onSupplement }: {
   const cands = duplicateCandidates(r, s.reports);
   const basis = applied.amounts[r.defectType];
 
+  // 상단 정보가 고정이라, 판정 카드가 그 아래에 붙으려면 높이를 알아야 한다
+  const headRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = headRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const set = () => (el.closest('.preview') as HTMLElement | null)?.style
+      .setProperty('--head-h', `${Math.round(el.getBoundingClientRect().height)}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   return (
     <div className="detail">
-      <header className="detail-head">
+      <header className="detail-head" ref={headRef}>
         <div className="crumb">심사 큐 › {r.id}</div>
         <h2>{r.id} {r.store} · {r.customer}</h2>
         <div className="badges">
