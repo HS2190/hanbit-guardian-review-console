@@ -151,22 +151,46 @@ main { padding: var(--iris-space-24); }
   border-radius: var(--iris-radius-lg);
   padding: var(--iris-space-20) var(--iris-space-24);
 }
-/* 적용 정책 — 좌우로 갈라 보이지 않게 한 덩이로 묶는다 */
-.summary { margin-top: var(--iris-space-16); }
-.summary > [class*="iris-body-"] { padding: var(--iris-space-4) var(--iris-space-4); }
+/* ── 상단 정보 아래는 전부 한 덩이 ──────────────────────────
+   적용 정책 · 절 · 판정이 따로 떠 있으면 카드가 여섯 장 흩어져 보인다.
+   하나의 흰 면으로 묶고, 안에서는 선으로만 가른다. */
+.summary {
+  margin-top: var(--iris-space-16);
+  border-bottom: 0 !important;
+  border-radius: var(--iris-radius-lg) var(--iris-radius-lg) 0 0 !important;
+}
+.summary > [class*="iris-body-"] { padding: var(--iris-space-20) var(--iris-space-24); }
+
+.detail-body {
+  background: var(--iris-semantic-background-normal-normal);
+  border: 1px solid var(--iris-semantic-line-normal-normal);
+  /* 덩이 안에서 적용 정책과 그 아래를 가르는 한 줄 */
+  border-top: 1px solid var(--iris-semantic-line-normal-alternative);
+  border-radius: 0 0 var(--iris-radius-lg) var(--iris-radius-lg);
+  overflow: hidden;
+}
+/* 덩이 안의 절은 카드가 아니라 선으로 갈린다 */
+.detail-main { padding: var(--iris-space-8) var(--iris-space-24) var(--iris-space-20); gap: 0; }
+.detail-main > .card,
+.detail-main > .rail,
+.detail-main > .rail-acc {
+  border: 0 !important; border-radius: 0 !important; background: transparent !important;
+  border-top: 1px solid var(--iris-semantic-line-normal-alternative) !important;
+}
+.detail-main > :first-child { border-top: 0 !important; }
+.detail-main > .card > [class*="iris-body-"],
+.detail-main > .rail > [class*="iris-body-"] { padding: var(--iris-space-16) 0; }
 
 /* 행동 열만 한 단계 눌러 앉힌다 — 정보가 아니라 할 일이라는 표시 */
 .panel-col {
   background: var(--iris-semantic-fill-normal);
-  border: 1px solid var(--iris-semantic-line-normal-normal);
-  border-radius: var(--iris-radius-lg);
-  overflow: hidden;
+  border-left: 1px solid var(--iris-semantic-line-normal-normal);
 }
 .panel { border: 0 !important; border-radius: 0 !important; background: transparent !important; }
 .panel > [class*="iris-body-"] { padding: var(--iris-space-20) var(--iris-space-24); }
 
 /* 판정 패널을 본문 오른쪽 고정 열로 */
-.detail-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: var(--iris-space-16); align-items: stretch; margin-top: var(--iris-space-16); }
+.detail-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 0; align-items: stretch; margin-top: 0; }
 .detail-main { min-width: 0; }
 /* 패널이 스크롤을 따라오려면 감싸는 열이 행 높이만큼 늘어나 있어야 한다 */
 .panel-col { position: relative; }
