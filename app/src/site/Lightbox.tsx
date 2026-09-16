@@ -6,7 +6,8 @@ export interface Shot { file: string; label: string; cap: string }
 /**
  * 화면을 크게 보는 겹창.
  * 1440px UI는 갤러리 크기에서 글자가 읽히지 않으므로, 실제 크기에 가깝게 볼 수단이 필요하다.
- * 닫는 길을 셋 둔다 — 배경 클릭 · Esc · 닫기 버튼. 좌우 키로 아홉 장을 넘긴다.
+ * 닫는 길을 셋 둔다 — 사진 클릭 · Esc · 닫기 버튼. 좌우 키로 아홉 장을 넘긴다.
+ * 배경은 닫기 대상이 아니다. 넘기다가 빈 곳을 잘못 눌러 창이 닫히는 일이 없다.
  */
 export function Lightbox({ shots, index, base, onClose, onMove }: {
   shots: Shot[];
@@ -49,17 +50,17 @@ export function Lightbox({ shots, index, base, onClose, onMove }: {
 
   // section.band에 z-index가 걸려 있어 그 안에서는 상단 내비 아래로 깔린다 — body에 직접 띄운다
   return createPortal(
-    <div className="lb" role="dialog" aria-modal="true" aria-label={`${shot.label} — 크게 보기`}
-      onClick={onClose}>
-      <figure className="lb-body" onClick={(e) => e.stopPropagation()}>
-        <img src={`${base}screens/${shot.file}`} alt={shot.label} />
+    <div className="lb" role="dialog" aria-modal="true" aria-label={`${shot.label} — 크게 보기`}>
+      <figure className="lb-body">
+        {/* 사진을 누르면 닫힌다. 키보드는 Esc와 닫기 버튼이 맡으므로 탭 순서를 늘리지 않는다. */}
+        <img src={`${base}screens/${shot.file}`} alt={shot.label} onClick={onClose} />
         <figcaption>
           <span className="lb-label">{shot.label}</span>
           <span className="lb-cap">{shot.cap}</span>
         </figcaption>
       </figure>
 
-      <div className="lb-bar" onClick={(e) => e.stopPropagation()}>
+      <div className="lb-bar">
         <button type="button" className="lb-nav" aria-label="이전 화면"
           onClick={() => onMove((index - 1 + shots.length) % shots.length)}>←</button>
         <span className="lb-count" aria-live="polite">{index + 1} / {shots.length}</span>
