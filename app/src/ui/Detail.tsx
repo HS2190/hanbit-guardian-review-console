@@ -13,6 +13,7 @@ export function Detail({ r, onConfirm, onSupplement }: {
 }) {
   const { s, d } = useStore();
   const [reason, setReason] = useState('');
+  const [showAll, setShowAll] = useState(false);
   const applied = appliedPolicy(s.policies, r.submittedAt);
   const current = currentPolicy(s.policies, s.now);
   const j = judge(r, s.reports, s.policies);
@@ -46,12 +47,11 @@ export function Detail({ r, onConfirm, onSupplement }: {
           <div className="overline">적용 정책 · {applied.version} ({fmt(applied.effectiveFrom)} 발효) · 잠김</div>
           <div className="amount">{r.defectType} {won(basis)}원</div>
           <div className="sub">{r.category} (대상) · 1인 한도 {won(applied.perPersonCap)}</div>
-          {applied.version !== current.version && (
-            <div className="sub muted">
-              현재 {current.version}는 {won(current.amounts[r.defectType])} — 비교용이며 이 건에 적용되지 않습니다
-            </div>
-          )}
-          <div className="sub muted">적용 정책은 접수 시각의 발효 버전으로 정해집니다 — 변경 불가</div>
+          <div className="sub muted">
+            {applied.version !== current.version
+              ? `현재 ${current.version}는 ${won(current.amounts[r.defectType])}이지만 이 건은 접수 시각 기준 ${applied.version}로 잠겨 있습니다`
+              : '적용 정책은 접수 시각의 발효 버전으로 정해집니다 — 변경 불가'}
+          </div>
         </div>
         <div>
           <div className="overline">산정</div>
@@ -73,17 +73,23 @@ export function Detail({ r, onConfirm, onSupplement }: {
             <tr><th>항목</th><th>적용 {applied.version} ({day(applied.effectiveFrom)})</th><th>현재 {current.version} · 비교</th></tr>
           </thead>
           <tbody>
-            {DEFECTS.map((k) => (
-              <tr key={k} className={k === r.defectType ? 'emph' : undefined}>
-                <td>{k}</td>
-                <td>{won(applied.amounts[k])}</td>
+            <tr className="emph">
+              <td>{r.defectType}</td><td>{won(basis)}</td>
+              <td className="muted">{basis === current.amounts[r.defectType] ? '—' : won(current.amounts[r.defectType])}</td>
+            </tr>
+            <tr><td>대상 카테고리</td><td>{applied.categories.join(' · ')}</td><td className="muted">—</td></tr>
+            <tr><td>1인 한도</td><td>{won(applied.perPersonCap)}</td><td className="muted">—</td></tr>
+            {showAll && DEFECTS.filter((k) => k !== r.defectType).map((k) => (
+              <tr key={k}>
+                <td>{k}</td><td>{won(applied.amounts[k])}</td>
                 <td className="muted">{applied.amounts[k] === current.amounts[k] ? '—' : won(current.amounts[k])}</td>
               </tr>
             ))}
-            <tr><td>대상 카테고리</td><td>{applied.categories.join(' · ')}</td><td className="muted">—</td></tr>
-            <tr><td>1인 한도</td><td>{won(applied.perPersonCap)}</td><td className="muted">—</td></tr>
           </tbody>
         </table>
+        <button className="more" onClick={() => setShowAll(!showAll)}>
+          {showAll ? '다른 결함 유형 접기' : `다른 결함 유형 ${DEFECTS.length - 1}항목 펼치기`}
+        </button>
       </Rail>
 
       <Rail label="② 증빙 · 유효성 평가">
@@ -116,11 +122,13 @@ export function Detail({ r, onConfirm, onSupplement }: {
           )}
       </Rail>
 
-      <Rail label="④ 산정 과정">
+      <Rail label="④ 산정 과정" tone="secondary" defaultOpen={done}
+        summary={`판정 순서 ${j.step}단계까지 진행`}>
         <ol className="trace">{j.trace.map((t, i) => <li key={i}>{t}</li>)}</ol>
       </Rail>
 
-      <Rail label="⑤ 고객 안내 근거">
+      <Rail label="⑤ 고객 안내 근거" tone="secondary" defaultOpen={done}
+        summary={done ? '확정본' : '확정 후 이 내용으로 발송'}>
         <pre className="notice">
 {`${fmt(r.submittedAt)} 접수 · 접수 당시 조건 ${r.defectType} ${won(basis)}원 (1인 한도 ${won(applied.perPersonCap)})
 ${noticeOutcome(r, j.outcome)}
@@ -129,7 +137,8 @@ ${noticePayout(r, done)}
         </pre>
       </Rail>
 
-      <Rail label="⑥ 활동 이력">
+      <Rail label="⑥ 활동 이력" tone="secondary"
+        summary={`${r.history.length}건`}>
         <ul className="history">
           {r.history.map((h, i) => (
             <li key={i}><b>{fmt(h.at)}</b> {h.action}{h.after ? ` · ${h.after}` : ''}{h.actor ? ` · ${h.actor}` : ''}</li>

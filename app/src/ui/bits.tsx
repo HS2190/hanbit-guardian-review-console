@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ContentBadge } from '@hs2190.an/iris-react';
 import type { Outcome, PayoutState, Process, Report } from '../domain/types';
 
@@ -42,11 +43,32 @@ export function PayoutBadge({ r, prefix }: { r: Report; prefix?: boolean }) {
   return <ContentBadge tone={tone[state]} variant="subtle">{prefix ? `지급 · ${label}` : label}</ContentBadge>;
 }
 
-export function Rail({ label, children }: { label: string; children: React.ReactNode }) {
+/**
+ * 판정에 쓰는 절은 펼친 채로, 확인용 절은 접은 채로 둔다.
+ * 접힌 절은 제목 옆 한 줄 요약으로 무엇이 들었는지 알린다.
+ */
+export function Rail({ label, children, summary, tone = 'primary', defaultOpen }: {
+  label: string; children: React.ReactNode;
+  summary?: React.ReactNode; tone?: 'primary' | 'secondary'; defaultOpen?: boolean;
+}) {
+  const collapsible = tone === 'secondary';
+  const [open, setOpen] = useState(defaultOpen ?? !collapsible);
+  if (!collapsible) {
+    return (
+      <section className="rail">
+        <h3 className="rail-label">{label}</h3>
+        <div className="rail-body">{children}</div>
+      </section>
+    );
+  }
   return (
-    <section className="rail">
-      <h3 className="rail-label">{label}</h3>
-      <div className="rail-body">{children}</div>
+    <section className={`rail secondary${open ? ' open' : ''}`}>
+      <button className="rail-toggle" aria-expanded={open} onClick={() => setOpen(!open)}>
+        <h3 className="rail-label">{label}</h3>
+        {!open && summary && <span className="rail-summary">{summary}</span>}
+        <span className="rail-chev">{open ? '접기' : '펼치기'}</span>
+      </button>
+      {open && <div className="rail-body">{children}</div>}
     </section>
   );
 }
