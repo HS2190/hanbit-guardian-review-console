@@ -31,8 +31,7 @@ function Console() {
   const [tab, setTab] = useState<Tab>(params.get('tab') === 'policy' ? '정책' : '심사 큐');
   const [dialog, setDialog] = useState<null | 'confirm' | 'supplement'>(null);
   const [supReason, setSupReason] = useState('라벨 판독이 어려워 재촬영이 필요합니다');
-  const wanted = params.get('id') ? `#${params.get('id')!.replace('#', '')}` : null;
-  const selected = s.reports.find((r) => r.id === (s.selected ?? wanted)) ?? null;
+  const selected = s.reports.find((r) => r.id === s.selected) ?? null;
   const j = selected ? judge(selected, s.reports, s.policies) : null;
 
   return (

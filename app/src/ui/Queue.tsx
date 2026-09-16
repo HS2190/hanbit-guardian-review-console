@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 import { FallbackView, FilterButton, SearchField, Table } from '@hs2190.an/iris-react';
 import { useStore } from '../store/store';
+import { appliedPolicy, currentPolicy } from '../domain/policy';
+import { blockingPredecessor } from '../domain/rules';
 import type { Process, Report } from '../domain/types';
-import { OutcomeBadge, PayoutBadge, ProcessBadge, fmt } from './bits';
+import { OutcomeBadge, PayoutBadge, ProcessBadge, fmt, won } from './bits';
 
 const ORDER: Process[] = ['접수', '심사 중', '보완 대기', '선행 판정 대기', '재심 대상', '재심 중', '심사 완료'];
 
@@ -24,6 +26,8 @@ export function Queue({ children }: { children: React.ReactNode }) {
     return m;
   }, [s.reports]);
 
+  const selected = s.selected && rows.some((r) => r.id === s.selected) ? s.selected : s.selected;
+
   return (
     <div className="queue-page">
       <div className="page-head">
@@ -44,55 +48,92 @@ export function Queue({ children }: { children: React.ReactNode }) {
         <span className="muted small">사유 합계는 건수와 다를 수 있음</span>
       </div>
 
-      <div className="workspace">
-        <div className="list">
-          {rows.length === 0 ? (
-            <FallbackView icon="search" title="조건에 맞는 건이 없습니다"
-              description="필터나 검색어를 지우면 전체가 보입니다." />
-          ) : (
-            <Table interactive
-              onClick={(e) => {
-                // 행 어디를 눌러도 선택되게 한다. 셀마다 버튼을 넣으면
-                // 스크린리더가 한 행에서 버튼 다섯 개를 읽는다.
-                const tr = (e.target as HTMLElement).closest('tbody tr');
-                if (!tr?.parentElement) return;
-                const i = Array.prototype.indexOf.call(tr.parentElement.children, tr);
-                const row = rows[i];
-                if (row) d({ t: 'select', id: row.id });
-              }}
-              columns={[
-                { key: 'id', header: 'ID' }, { key: 'at', header: '접수' },
-                { key: 'cu', header: '고객' }, { key: 'df', header: '결함 유형' },
-                { key: 'pr', header: '처리' },
-              ]}
-              data={rows.map((r) => ({
-                id: <button className={`row-id${s.selected === r.id ? ' on' : ''}`}
-                  aria-current={s.selected === r.id || undefined}
-                  onClick={() => d({ t: 'select', id: r.id })}>{r.id}</button>,
-                at: fmt(r.submittedAt), cu: r.customer, df: r.defectType,
-                pr: <ProcessBadge v={r.process} />,
-              }))} />
-          )}
+      {rows.length === 0 ? (
+        <div className="list full">
+          <FallbackView icon="search" title="조건에 맞는 건이 없습니다"
+            description="필터나 검색어를 지우면 전체가 보입니다." />
         </div>
-        <div className="preview">{children}</div>
-      </div>
+      ) : selected ? (
+        <div className="workspace">
+          <aside className="rail">
+            <div className="rail-head">
+              <b>심사 큐 · {rows.length}건</b>
+              <button className="rail-expand" onClick={() => d({ t: 'select', id: null })}>목록 펼치기 ▸</button>
+            </div>
+            {rows.map((r) => (
+              <button key={r.id} className={`rail-row${r.id === selected ? ' on' : ''}`}
+                onClick={() => d({ t: 'select', id: r.id })}>
+                <span className="rr-top"><b>{r.id}</b><ProcessBadge v={r.process} /></span>
+                <span className="rr-at">{fmt(r.submittedAt)}</span>
+              </button>
+            ))}
+          </aside>
+          <div className="preview">{children}</div>
+        </div>
+      ) : (
+        <div className="list full">
+          <FullTable rows={rows} />
+        </div>
+      )}
     </div>
   );
+}
+
+/** 선택 전 큐 — 훑으면서 무엇을 먼저 열지 정하는 화면이라 열을 줄이지 않는다. */
+function FullTable({ rows }: { rows: Report[] }) {
+  const { s, d } = useStore();
+  const current = currentPolicy(s.policies, s.now);
+  const days = (iso: string) => Math.max(0, Math.floor((Date.parse(s.now) - Date.parse(iso)) / 864e5));
+
+  return (
+    <Table interactive
+      onClick={(e) => {
+        const tr = (e.target as HTMLElement).closest('tbody tr');
+        if (!tr?.parentElement) return;
+        const i = Array.prototype.indexOf.call(tr.parentElement.children, tr);
+        const row = rows[i];
+        if (row) d({ t: 'select', id: row.id });
+      }}
+      columns={[
+        { key: 'id', header: 'ID' }, { key: 'at', header: '접수' }, { key: 'cu', header: '고객' },
+        { key: 'df', header: '결함 유형' }, { key: 'am', header: '기준액 (적용)', align: 'right' },
+        { key: 'po', header: '정책' }, { key: 'pr', header: '처리' }, { key: 'hd', header: '보류 사유' },
+        { key: 'rs', header: '결과' }, { key: 'py', header: '지급' },
+        { key: 'as', header: '담당' }, { key: 'dw', header: '체류', align: 'right' },
+      ]}
+      data={rows.map((r) => {
+        const p = appliedPolicy(s.policies, r.submittedAt);
+        const differs = p.version !== current.version && p.amounts[r.defectType] !== current.amounts[r.defectType];
+        return {
+          id: <button className={`row-id${s.selected === r.id ? ' on' : ''}`}>{r.id}</button>,
+          at: fmt(r.submittedAt), cu: r.customer, df: r.defectType,
+          am: won(p.amounts[r.defectType]),
+          po: <span className="pol">{p.version}{differs && <em className="diff">적용 ≠ 현재</em>}</span>,
+          pr: <ProcessBadge v={r.process} />,
+          hd: <HoldReason r={r} />,
+          rs: <OutcomeBadge v={r.outcome} dupOf={r.duplicateOf} />,
+          py: <PayoutBadge r={r} />,
+          as: r.assignee ?? '—',
+          dw: `${days(r.submittedAt)}일`,
+        };
+      })} />
+  );
+}
+
+function HoldReason({ r }: { r: Report }) {
+  const { s } = useStore();
+  if (r.process === '보완 대기' && r.supplement) {
+    const left = Math.ceil((Date.parse(r.supplement.dueAt) - Date.parse(s.now)) / 864e5);
+    return <span className="hold">기한 {fmt(r.supplement.dueAt)} D{left >= 0 ? '-' : '+'}{Math.abs(left)}<br />
+      <em>{r.supplement.submitted ? '제출 있음' : '제출 없음'}</em></span>;
+  }
+  if (r.process === '선행 판정 대기') {
+    const pred = blockingPredecessor(r, s.reports);
+    return <span className="hold">금액 · {pred?.id ?? '—'}</span>;
+  }
+  return <span className="muted">—</span>;
 }
 
 export function QueueEmptyPreview() {
-  return (
-    <div className="preview-empty">
-      <b>왼쪽에서 건을 선택하세요</b>
-      <p className="muted">선택하면 접수 근거 · 산정 · 판정이 이 자리에 열립니다</p>
-    </div>
-  );
-}
-
-export function RowStates({ r }: { r: Report }) {
-  return (
-    <div className="badges">
-      <ProcessBadge v={r.process} /><OutcomeBadge v={r.outcome} dupOf={r.duplicateOf} /><PayoutBadge r={r} />
-    </div>
-  );
+  return <div className="preview-empty"><b>목록에서 건을 선택하세요</b></div>;
 }

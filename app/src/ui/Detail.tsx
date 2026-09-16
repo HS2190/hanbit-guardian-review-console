@@ -65,6 +65,8 @@ export function Detail({ r, onConfirm, onSupplement }: {
         </div>
       </section>
 
+      <div className="detail-body">
+        <div className="detail-main">
       <Rail label="① 접수 근거">
         <table className="basis">
           <thead>
@@ -135,6 +137,8 @@ ${noticePayout(r, done)}
         </ul>
       </Rail>
 
+        </div>
+      <div className="panel-col">
       <aside className="panel">
         <h3>판정</h3>
         {done ? (
@@ -184,6 +188,8 @@ ${noticePayout(r, done)}
           </p>
         )}
       </aside>
+      </div>
+      </div>
     </div>
   );
 }

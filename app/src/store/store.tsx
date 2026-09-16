@@ -43,7 +43,7 @@ function queryId(): string | null {
 const q = queryId();
 
 export const initial: State = {
-  reports: seedReports, policies: seedPolicies, selected: q ? `#${q.replace('#', '')}` : '#1042',
+  reports: seedReports, policies: seedPolicies, selected: q ? `#${q.replace('#', '')}` : null,
   filter: null, query: '', toast: null, draft: null, step: '현황', now: NOW,
 };
 
