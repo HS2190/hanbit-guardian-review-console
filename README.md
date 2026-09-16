@@ -2,7 +2,7 @@
 
 제보를 심사하는 동안 리워드 정책이 바뀌어도, 고객이 제출할 때 본 조건 그대로 심사되게 만드는 관리자 백오피스입니다. 프로덕트 디자이너 채용 사전 과제로 2026년 9월 14일부터 18일까지 닷새간 작업했습니다.
 
-**동작하는 프로토타입** — [열기](https://hs2190.github.io/hanbit-guardian-review-console/) · 규칙이 실제로 계산됩니다
+**여기서 한 번에 봅니다** — [사이트 열기](https://hs2190.github.io/hanbit-guardian-review-console/) · 개요 · 화면 10장 · 문서 14편 · 동작하는 프로토타입
 **설계 정본은 Figma입니다** — [파일 열기](https://www.figma.com/design/riBWYMkoDYOWaRlTkggqnK/) · 토큰 · 컴포넌트 · 전 화면 33장
 **선택한 트랙** — 관리자 백오피스 (고객 화면은 접점 3개만 정의)
 
