@@ -52,7 +52,7 @@
 | [05 화면 결정](docs/05-screens.md) | 의미 제약 5의 번역, 의도적으로 하지 않은 것 |
 | [06 검수 기록](docs/06-review.md) | 잡힌 결함 4, 받아들이지 않은 지적 |
 
-작업 원문 12편은 [docs/appendix](docs/appendix)에 그대로 있습니다. PRD 전문, 기능 명세, 화면 기획, 플로우, 와이어프레임, 디자인 스펙, 컴포넌트 스펙, 라이팅 가이드, 문구 시트, 리서치 3편입니다. 읽을 문서가 아니라 확인할 문서입니다.
+부록 네 편은 위 여섯 편의 근거입니다. [상태와 전이 전수](docs/appendix/states.md) · [요구사항과 수용 기준](docs/appendix/requirements.md) · [문구 규칙과 문구 시트](docs/appendix/copy.md) · [디자인 시스템 적용](docs/appendix/design-system.md). 읽을 문서가 아니라 확인할 문서입니다.
 
 ## 과정과 도구
 

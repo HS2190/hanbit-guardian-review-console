@@ -10,20 +10,12 @@ export const DOCS: DocMeta[] = [
   { slug: '06-review', no: '06', title: '검수 기록', blurb: '잡힌 결함 4, 받아들이지 않은 지적' },
 ];
 
-/** 부록 — 작업 원문. 읽을 문서가 아니라 확인할 문서다. */
+/** 부록 — 읽는 문서의 근거. 읽을 문서가 아니라 확인할 문서다. */
 export const APPENDIX: DocMeta[] = [
-  { slug: 'prd', no: '', title: 'PRD 전문', blurb: '결정 10개와 요구사항 25개' },
-  { slug: 'feature-spec', no: '', title: '기능 명세', blurb: '상태 23개와 전이 전수' },
-  { slug: 'screen-plan', no: '', title: '화면 기획', blurb: '화면별 목적과 구성' },
-  { slug: 'user-flow', no: '', title: '플로우', blurb: '심사와 정책 변경의 경로' },
-  { slug: 'wireframes', no: '', title: '와이어프레임', blurb: '배치 가설과 검증' },
-  { slug: 'design-spec', no: '', title: '디자인 스펙', blurb: '레이아웃 문법과 레드라인' },
-  { slug: 'component-spec', no: '', title: '컴포넌트 스펙', blurb: '상태·속성·접근성 이름' },
-  { slug: 'writing-guide', no: '', title: '라이팅 가이드', blurb: '상태 값 고정표와 금지 표현' },
-  { slug: 'copy-sheet', no: '', title: '문구 시트', blurb: '화면별 원문·수정안·이유 161행' },
-  { slug: 'research-synthesis', no: '', title: '리서치 종합', blurb: '근거 원문과 출처' },
-  { slug: 'research-digest', no: '', title: '리서치 다이제스트', blurb: '핵심 요약' },
-  { slug: 'competitor-analysis', no: '', title: '경쟁 분석', blurb: '유사 서비스의 처리 방식' },
+  { slug: 'states', no: '', title: '상태와 전이 전수', blurb: '세 축의 값 전부, 전이표, 정책 × 상태 교차, 보류 사유' },
+  { slug: 'requirements', no: '', title: '요구사항과 수용 기준', blurb: '기능 25 · 비기능 5 · 예외와 경계 상태' },
+  { slug: 'copy', no: '', title: '문구 규칙과 문구 시트', blurb: '상태 값 고정표, 금지 표현, 화면별 대조 161행' },
+  { slug: 'design-system', no: '', title: '디자인 시스템 적용', blurb: '레이아웃 문법, 색 규칙, 고유 구조 6, 접근성 이름' },
 ];
 
 export const ALL_DOCS = [...DOCS, ...APPENDIX];
@@ -35,18 +27,10 @@ const loaders: Record<string, () => Promise<string>> = {
   '04-states': () => import('../../../docs/04-states.md?raw').then((m) => m.default),
   '05-screens': () => import('../../../docs/05-screens.md?raw').then((m) => m.default),
   '06-review': () => import('../../../docs/06-review.md?raw').then((m) => m.default),
-  'prd': () => import('../../../docs/appendix/prd.md?raw').then((m) => m.default),
-  'feature-spec': () => import('../../../docs/appendix/feature-spec.md?raw').then((m) => m.default),
-  'screen-plan': () => import('../../../docs/appendix/screen-plan.md?raw').then((m) => m.default),
-  'user-flow': () => import('../../../docs/appendix/user-flow.md?raw').then((m) => m.default),
-  'wireframes': () => import('../../../docs/appendix/wireframes.md?raw').then((m) => m.default),
-  'design-spec': () => import('../../../docs/appendix/design-spec.md?raw').then((m) => m.default),
-  'component-spec': () => import('../../../docs/appendix/component-spec.md?raw').then((m) => m.default),
-  'writing-guide': () => import('../../../docs/appendix/writing-guide.md?raw').then((m) => m.default),
-  'copy-sheet': () => import('../../../docs/appendix/copy-sheet.md?raw').then((m) => m.default),
-  'research-synthesis': () => import('../../../docs/appendix/research-synthesis.md?raw').then((m) => m.default),
-  'research-digest': () => import('../../../docs/appendix/research-digest.md?raw').then((m) => m.default),
-  'competitor-analysis': () => import('../../../docs/appendix/competitor-analysis.md?raw').then((m) => m.default),
+  'states': () => import('../../../docs/appendix/states.md?raw').then((m) => m.default),
+  'requirements': () => import('../../../docs/appendix/requirements.md?raw').then((m) => m.default),
+  'copy': () => import('../../../docs/appendix/copy.md?raw').then((m) => m.default),
+  'design-system': () => import('../../../docs/appendix/design-system.md?raw').then((m) => m.default),
 };
 
 export const loadDoc = (slug: string) => loaders[slug]?.() ?? Promise.resolve('');
