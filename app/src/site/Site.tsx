@@ -76,7 +76,7 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
           </Reveal>
           <Reveal className="col-12" stagger={false}>
             <figure className="bigshot">
-              <img src={`${import.meta.env.BASE_URL}screens/02-detail.png`} alt="심사 상세 — 적용 정책이 첫 시선에 닿는 배치" />
+              <img src={`${import.meta.env.BASE_URL}screens/02-detail.webp`} alt="심사 상세 — 적용 정책이 첫 시선에 닿는 배치" />
               <figcaption><b>심사 상세</b>첫 시선이 금액이 아니라 "어느 시점 기준인가"에 닿는다. #1042는 9/15 09:47 접수라 v1의 30,000원으로 잠겨 있고, 36분 뒤 발효한 v2는 이 건을 바꾸지 못한다.</figcaption>
             </figure>
           </Reveal>

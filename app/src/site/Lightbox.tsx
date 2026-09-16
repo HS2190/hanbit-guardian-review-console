@@ -38,6 +38,14 @@ export function Lightbox({ shots, index, base, onClose, onMove }: {
     };
   }, []);
 
+  // 앞뒤 한 장씩 미리 받아 둔다 — 2배 이미지라 넘길 때 비는 순간이 생기면 안 된다
+  useEffect(() => {
+    for (const i of [(index + 1) % shots.length, (index - 1 + shots.length) % shots.length]) {
+      const im = new window.Image();
+      im.src = `${base}screens/${shots[i].file}`;
+    }
+  }, [index, shots, base]);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { e.preventDefault(); onClose(); }
