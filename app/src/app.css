@@ -93,3 +93,10 @@ table.basis tr.emph td { background: var(--iris-semantic-background-status-info)
 .alert-wrap > * { width: 100%; }
 .policy > button, .panel > button { justify-self: start; }
 .row-actions button { flex: 0 0 auto; }
+
+/* 행 전체가 클릭 대상 */
+.list table[data-interactive] tbody tr { cursor: pointer; }
+.list tbody tr:has(.row-id.on) { background: var(--iris-semantic-background-status-info); }
+.list tbody tr:has(.row-id.on) .row-id { font-weight: 700; }
+.row-id { text-decoration: none; }
+.row-id:focus-visible { outline: 2px solid var(--iris-semantic-primary-normal); outline-offset: 2px; border-radius: 3px; }

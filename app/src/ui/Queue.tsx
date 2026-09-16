@@ -51,6 +51,15 @@ export function Queue({ children }: { children: React.ReactNode }) {
               description="필터나 검색어를 지우면 전체가 보입니다." />
           ) : (
             <Table interactive
+              onClick={(e) => {
+                // 행 어디를 눌러도 선택되게 한다. 셀마다 버튼을 넣으면
+                // 스크린리더가 한 행에서 버튼 다섯 개를 읽는다.
+                const tr = (e.target as HTMLElement).closest('tbody tr');
+                if (!tr?.parentElement) return;
+                const i = Array.prototype.indexOf.call(tr.parentElement.children, tr);
+                const row = rows[i];
+                if (row) d({ t: 'select', id: row.id });
+              }}
               columns={[
                 { key: 'id', header: 'ID' }, { key: 'at', header: '접수' },
                 { key: 'cu', header: '고객' }, { key: 'df', header: '결함 유형' },
@@ -58,6 +67,7 @@ export function Queue({ children }: { children: React.ReactNode }) {
               ]}
               data={rows.map((r) => ({
                 id: <button className={`row-id${s.selected === r.id ? ' on' : ''}`}
+                  aria-current={s.selected === r.id || undefined}
                   onClick={() => d({ t: 'select', id: r.id })}>{r.id}</button>,
                 at: fmt(r.submittedAt), cu: r.customer, df: r.defectType,
                 pr: <ProcessBadge v={r.process} />,
