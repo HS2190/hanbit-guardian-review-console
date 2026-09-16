@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { marked } from 'marked';
-import { DOCS, SHOTS, loadDoc } from './docs';
+import { ALL_DOCS, APPENDIX, DOCS, SHOTS, loadDoc } from './docs';
 
 const FIGMA = 'https://www.figma.com/design/riBWYMkoDYOWaRlTkggqnK/';
 const REPO = 'https://github.com/HS2190/hanbit-guardian-review-console';
@@ -121,7 +121,7 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
               <div className="mini light"><b>보완 1회 · 기한 7일은 가설</b><span>운영 데이터로 정할 값이다.</span></div>
               <div className="mini light"><b>동시 편집 잠금 없음</b><span>먼저 확정한 쪽이 이기고 뒤늦은 저장은 실패 안내를 받는다.</span></div>
             </div>
-            <p>과정과 근거는 <a href="#/docs" onClick={(e) => { e.preventDefault(); go('docs'); }}>문서 14편</a>에 그대로 있습니다. 검수에서 무엇이 잡혔고 무엇을 받아들이지 않았는지도 함께 적었습니다.</p>
+            <p>과정과 근거는 <a href="#/docs" onClick={(e) => { e.preventDefault(); go('docs'); }}>문서 여섯 편</a>에 정리했습니다. 작업 원문은 부록으로 접어 두었습니다.</p>
           </div>
         </div>
       </section>
@@ -156,7 +156,7 @@ export function Screens() {
 
 export function Docs({ slug, go }: { slug: string; go: (r: Route, slug?: string) => void }) {
   const [md, setMd] = useState('');
-  const current = useMemo(() => DOCS.find((d) => d.slug === slug) ?? DOCS[0], [slug]);
+  const current = useMemo(() => ALL_DOCS.find((d) => d.slug === slug) ?? DOCS[0], [slug]);
 
   useEffect(() => {
     let live = true;
@@ -173,11 +173,18 @@ export function Docs({ slug, go }: { slug: string; go: (r: Route, slug?: string)
         <div className="col-12">
           <div className="docs-layout">
             <aside className="toc">
-              <span className="label" style={{ padding: '0 10px 8px' }}>문서 14편</span>
+              <span className="label" style={{ padding: '0 10px 8px' }}>읽는 문서 여섯</span>
               {DOCS.map((d) => (
                 <a key={d.slug} href={`#/docs/${d.slug}`} className={d.slug === current.slug ? 'on' : ''}
                   onClick={(e) => { e.preventDefault(); go('docs', d.slug); }}>
                   {d.no} {d.title}
+                </a>
+              ))}
+              <span className="label" style={{ padding: '18px 10px 8px' }}>부록 · 작업 원문</span>
+              {APPENDIX.map((d) => (
+                <a key={d.slug} href={`#/docs/${d.slug}`} className={`sub${d.slug === current.slug ? ' on' : ''}`}
+                  onClick={(e) => { e.preventDefault(); go('docs', d.slug); }}>
+                  {d.title}
                 </a>
               ))}
             </aside>
