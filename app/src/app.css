@@ -86,7 +86,8 @@ main { padding: var(--iris-space-24); }
   .summary { grid-template-columns: 1fr; }
 }
 
-.alert-wrap { margin: var(--iris-space-12) 0; }
+/* 차단 배너도 같은 16 리듬 위에 앉는다 */
+.alert-wrap { margin: var(--iris-space-16) 0 0; }
 
 .policy > button { justify-self: start; }
 /* 판정 패널의 버튼은 입력 컨트롤과 같은 폭으로 — 세로로 훑을 때 모서리가 한 줄로 맞는다 */
@@ -129,7 +130,7 @@ main { padding: var(--iris-space-24); }
 
 /* ── 3안 · 접히는 목록 레일 ── */
 .list.full { padding: 0; }
-.workspace { grid-template-columns: 260px minmax(0, 1fr); gap: 0; }
+.workspace { grid-template-columns: 260px minmax(0, 1fr); gap: var(--iris-space-16); }
 .queue-rail > [class*="iris-body-"] { padding: 0; }
 .queue-rail-head { display: flex; align-items: center; justify-content: space-between; gap: var(--iris-space-8); padding: var(--iris-space-12) var(--iris-space-14) var(--iris-space-8); }
 .queue-rail-head b { font-size: var(--iris-font-size-label-2); }
@@ -140,10 +141,32 @@ main { padding: var(--iris-space-24); }
 
 
 
-.preview { border-radius: 0 var(--iris-radius-md) var(--iris-radius-md) 0; }
+/* 오른쪽은 면이 아니라 캔버스다 — 그 위에 흰 덩이(상단 정보 · 적용 정책 · 절 · 판정)가 뜬다 */
+.preview { background: transparent; border: 0; border-radius: 0; padding: 0; }
+
+/* 상단 정보 — 하나의 흰 덩이 */
+.detail-head {
+  background: var(--iris-semantic-background-normal-normal);
+  border: 1px solid var(--iris-semantic-line-normal-normal);
+  border-radius: var(--iris-radius-lg);
+  padding: var(--iris-space-20) var(--iris-space-24);
+}
+/* 적용 정책 — 좌우로 갈라 보이지 않게 한 덩이로 묶는다 */
+.summary { margin-top: var(--iris-space-16); }
+.summary > [class*="iris-body-"] { padding: var(--iris-space-4) var(--iris-space-4); }
+
+/* 행동 열만 한 단계 눌러 앉힌다 — 정보가 아니라 할 일이라는 표시 */
+.panel-col {
+  background: var(--iris-semantic-fill-normal);
+  border: 1px solid var(--iris-semantic-line-normal-normal);
+  border-radius: var(--iris-radius-lg);
+  overflow: hidden;
+}
+.panel { border: 0 !important; border-radius: 0 !important; background: transparent !important; }
+.panel > [class*="iris-body-"] { padding: var(--iris-space-20) var(--iris-space-24); }
 
 /* 판정 패널을 본문 오른쪽 고정 열로 */
-.detail-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: var(--iris-space-16); align-items: stretch; margin-top: var(--iris-space-12); }
+.detail-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: var(--iris-space-16); align-items: stretch; margin-top: var(--iris-space-16); }
 .detail-main { min-width: 0; }
 /* 패널이 스크롤을 따라오려면 감싸는 열이 행 높이만큼 늘어나 있어야 한다 */
 .panel-col { position: relative; }
