@@ -12,9 +12,9 @@ export const DOCS: DocMeta[] = [
 
 /** 부록 — 읽는 문서의 근거. 읽을 문서가 아니라 확인할 문서다. */
 export const APPENDIX: DocMeta[] = [
-  { slug: 'states', no: '', title: '상태와 전이 전수', blurb: '세 축의 값 전부, 전이표, 정책 × 상태 교차, 보류 사유' },
-  { slug: 'requirements', no: '', title: '요구사항과 수용 기준', blurb: '기능 25 · 비기능 5 · 예외와 경계 상태' },
-  { slug: 'copy', no: '', title: '문구 규칙과 문구 시트', blurb: '상태 값 고정표, 금지 표현, 화면별 대조 161행' },
+  { slug: 'states', no: '', title: '상태와 전이', blurb: '값 23개의 정의, 정책 × 상태 교차, 큐 보류 사유 6' },
+  { slug: 'requirements', no: '', title: '무엇을 확인하면 되는가', blurb: '눌러서 검증할 수 있는 항목, 아직 확인 못 한 것' },
+  { slug: 'copy', no: '', title: '문구 규칙과 대조 예', blurb: '상태 값 고정표, 쓰지 않는 표현, 고친 예 9' },
   { slug: 'design-system', no: '', title: '디자인 시스템 적용', blurb: '레이아웃 문법, 색 규칙, 고유 구조 6, 접근성 이름' },
 ];
 

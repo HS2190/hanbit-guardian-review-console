@@ -52,7 +52,7 @@
 | [05 화면 결정](docs/05-screens.md) | 의미 제약 5의 번역, 의도적으로 하지 않은 것 |
 | [06 검수 기록](docs/06-review.md) | 잡힌 결함 4, 받아들이지 않은 지적 |
 
-부록 네 편은 위 여섯 편의 근거입니다. [상태와 전이 전수](docs/appendix/states.md) · [요구사항과 수용 기준](docs/appendix/requirements.md) · [문구 규칙과 문구 시트](docs/appendix/copy.md) · [디자인 시스템 적용](docs/appendix/design-system.md). 읽을 문서가 아니라 확인할 문서입니다.
+부록 네 편은 위 여섯 편의 근거입니다. 작업 원문을 그대로 옮긴 것이 아니라, 주장을 뒷받침하는 내용만 다시 썼습니다. [상태와 전이](docs/appendix/states.md) · [무엇을 확인하면 되는가](docs/appendix/requirements.md) · [문구 규칙과 대조 예](docs/appendix/copy.md) · [디자인 시스템 적용](docs/appendix/design-system.md).
 
 ## 과정과 도구
 
