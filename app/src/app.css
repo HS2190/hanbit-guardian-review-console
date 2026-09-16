@@ -117,6 +117,11 @@ main { padding: var(--iris-space-24); }
   .app-shell .preview { min-height: 0; }
 }
 
+/* Iris Table의 td·th만 타이포 클래스를 쓰지 않아 keep-all이 빠져 있다
+   (.iris-label-2 등은 전부 keep-all). 시스템이 의도한 상태로 맞춘다 —
+   1280에서 "송지|아" "유통기한 경|과"처럼 이름이 잘리던 것. */
+.shell [class*="iris-td-"], .shell [class*="iris-th-"] { word-break: keep-all; }
+
 /* 목록 안에서도 열 머리는 붙어 있는다 */
 .list thead th { position: sticky; top: 0; z-index: 2;
   background: var(--iris-semantic-background-normal-normal);

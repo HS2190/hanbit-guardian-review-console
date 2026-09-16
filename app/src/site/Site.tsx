@@ -41,7 +41,7 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
     <>
       <section className="band hero-band">
         <div className="grid">
-          <div className="col-6 hero-txt">
+          <div className="col-7 hero-txt">
             <div className="kick fu" style={{ animationDelay: '40ms' }}>프로덕트 디자이너 사전 과제 · 트랙 B · 2026.09.14 — 09.18</div>
             <h1 className="fu" style={{ animationDelay: '110ms' }}>심사하는 동안 규칙이 바뀌어도,<br />고객이 본 조건 그대로</h1>
             <p className="lede fu" style={{ animationDelay: '220ms' }}>
@@ -53,7 +53,7 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
               <a className="cta ghost" href="#/screens" onClick={(e) => { e.preventDefault(); go('screens'); }}>화면 보기</a>
             </div>
           </div>
-          <div className="col-6 hero-graphic"><HeroTimeline /></div>
+          <div className="col-5 hero-graphic"><HeroTimeline /></div>
         </div>
       </section>
 

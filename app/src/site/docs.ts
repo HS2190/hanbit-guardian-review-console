@@ -36,7 +36,7 @@ const loaders: Record<string, () => Promise<string>> = {
 export const loadDoc = (slug: string) => loaders[slug]?.() ?? Promise.resolve('');
 
 export const SHOTS = [
-  { file: '01-queue.png', label: '심사 큐', cap: '선택 전에는 열두 열을 전체 폭으로 편다. 훑으면서 무엇을 먼저 열지 정하는 화면이라 기준액·정책 차이·보류 사유·지급까지 남긴다.' },
+  { file: '01-queue.png', label: '심사 큐', cap: '선택 전에는 열두 열을 전체 폭으로 편다. 훑으면서 무엇을 먼저 열지 정하는 화면이라 기준액 · 정책 차이 · 보류 사유 · 지급까지 남긴다.' },
   { file: '02-detail.png', label: '심사 상세', cap: '건을 고르면 목록이 레일로 접히고 상세가 열린다. 첫 시선이 적용 정책에 닿는다. 금액보다 "어느 시점 기준인가"가 먼저다.' },
   { file: '03-confirmable.png', label: '확정 가능 상태', cap: '조건이 갖춰지면 판정 패널에 주 버튼 하나만 선다. 되돌릴 수 없는 행동이라 자물쇠와 금액을 라벨에 넣었다.' },
   { file: '04-blocked.png', label: '확정 차단', cap: '같은 고객의 선행 건이 미판정이면 확정을 막는다. 이유 없는 비활성을 두지 않고 막힌 이유와 갈 곳을 함께 준다.' },
