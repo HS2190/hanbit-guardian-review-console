@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Popup, TextField, Toast, TopNavigation } from '@hs2190.an/iris-react';
 import { Store, useStore } from './store/store';
 import { Queue, QueueEmptyPreview } from './ui/Queue';
@@ -7,10 +7,21 @@ import { Policy } from './ui/Policy';
 import { judge } from './domain/rules';
 import { won } from './ui/bits';
 import './app.css';
+import './site/theme.css';
+import { Docs, Footer, Nav, Overview, Screens, type Route } from './site/Site';
 
 type Tab = '심사 큐' | '정책';
 
-const params = new URLSearchParams(typeof location === 'undefined' ? '' : location.search);
+function readHash(): { route: Route; slug: string; query: URLSearchParams } {
+  const raw = typeof location === 'undefined' ? '' : location.hash.replace(/^#\/?/, '');
+  const [path, qs] = raw.split('?');
+  const [head, tail] = path.split('/');
+  const route: Route = (['overview', 'screens', 'docs', 'app'] as const).includes(head as Route)
+    ? (head as Route) : 'overview';
+  return { route, slug: tail ?? '', query: new URLSearchParams(qs ?? (typeof location === 'undefined' ? '' : location.search)) };
+}
+
+const params = readHash().query;
 
 function Console() {
   const { s, d } = useStore();
@@ -94,6 +105,42 @@ function Console() {
   );
 }
 
+function Site() {
+  const [{ route, slug }, setNav] = useState(readHash);
+
+  useEffect(() => {
+    const on = () => { setNav(readHash()); window.scrollTo(0, 0); };
+    window.addEventListener('hashchange', on);
+    return () => window.removeEventListener('hashchange', on);
+  }, []);
+
+  const go = (r: Route, s?: string) => { location.hash = `#/${r}${s ? `/${s}` : ''}`; };
+
+  return (
+    <>
+      <Nav route={route} go={go} />
+      {route === 'app' ? (
+        <div>
+          <div className="doc-world app-frame">
+            <div className="app-note">
+              <b>프로토타입 · 규칙이 실제로 계산됩니다</b>
+              <span>목 데이터로 브라우저 안에서만 동작하고 새로고침하면 처음 상태로 돌아갑니다.</span>
+            </div>
+          </div>
+          <Store><Console /></Store>
+        </div>
+      ) : (
+        <div className="doc-world">
+          {route === 'overview' && <Overview go={go} />}
+          {route === 'screens' && <Screens />}
+          {route === 'docs' && <Docs slug={slug || '00-assignment'} go={go} />}
+          <Footer />
+        </div>
+      )}
+    </>
+  );
+}
+
 export default function App() {
-  return <Store><Console /></Store>;
+  return <Site />;
 }
