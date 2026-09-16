@@ -3,7 +3,6 @@ import { marked } from 'marked';
 import { ALL_DOCS, APPENDIX, DOCS, SHOTS, loadDoc } from './docs';
 
 const FIGMA = 'https://www.figma.com/design/riBWYMkoDYOWaRlTkggqnK/';
-const REPO = 'https://github.com/HS2190/hanbit-guardian-review-console';
 
 export type Route = 'overview' | 'screens' | 'docs' | 'app';
 
@@ -19,7 +18,6 @@ export function Nav({ route, go, doc }: { route: Route; go: (r: Route, slug?: st
         {item('overview', '개요')}{item('docs', '문서')}{item('screens', '화면')}{item('app', '프로토타입')}
         <span className="right">
           <a href={FIGMA} target="_blank" rel="noreferrer">Figma ↗</a>
-          <a href={REPO} target="_blank" rel="noreferrer">GitHub ↗</a>
         </span>
       </div>
       {doc && <span hidden>{doc}</span>}
@@ -59,7 +57,7 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
             <dl className="facts">
               <div className="fact"><dt>트랙</dt><dd>관리자 백오피스 (고객 화면은 접점 3개 정의)</dd></div>
               <div className="fact"><dt>기간</dt><dd>닷새</dd></div>
-              <div className="fact"><dt>산출</dt><dd>화면 33장 · 문서 14편 · 동작하는 프로토타입</dd></div>
+              <div className="fact"><dt>산출</dt><dd>Figma 화면 33장 · 문서 10편 · 동작하는 프로토타입</dd></div>
               <div className="fact"><dt>역할</dt><dd>문제 정의부터 화면·문구·구현까지 단독</dd></div>
             </dl>
           </div>
@@ -134,7 +132,7 @@ export function Screens() {
     <section className="band">
       <div className="grid">
         <div className="col-4"><span className="label">화면</span><h2>무엇을 보면 되는가</h2>
-          <p>설계 정본은 Figma에 있습니다. 아래는 그중 판단이 드러나는 열 장입니다.</p>
+          <p>아래 아홉 장은 배포된 프로토타입에서 그대로 찍은 것입니다. 전체 화면 서른세 장과 설계 정본은 Figma에 있습니다.</p>
           <a className="cta ghost" href={FIGMA} target="_blank" rel="noreferrer">Figma에서 전체 보기 ↗</a>
         </div>
         <div className="col-7">
@@ -206,8 +204,7 @@ export function Footer() {
       <div className="grid">
         <div className="col-6">
           <p style={{ margin: 0 }}>
-            설계 정본 <a href={FIGMA} target="_blank" rel="noreferrer">Figma</a> ·
-            과정 기록 <a href={REPO} target="_blank" rel="noreferrer">GitHub</a>
+            설계 정본 <a href={FIGMA} target="_blank" rel="noreferrer">Figma</a>
           </p>
         </div>
         <div className="col-6">

@@ -37,7 +37,7 @@ const rows: Seed[] = [
   { id: '#1107', store: '성수점', customer: '한지호', customerKey: 'C-한지호', category: '생활용품', sku: 'SKU-E88', unit: 'u1', defectType: '가격표 오류', submittedAt: '2026-09-16T15:30:00+09:00', evidenceOk: true, process: '심사 완료', outcome: '중복', duplicateOf: '#1103', payout: { state: '해당 없음', amount: 0, reason: '중복' }, assignee: '최민아' },
   { id: '#1110', store: '성수점', customer: '오유진', customerKey: 'C-오유진', category: '생활용품', sku: 'SKU-E88', unit: 'u2', defectType: '파손·오염', submittedAt: '2026-09-16T16:10:00+09:00', evidenceOk: true, process: '심사 완료', outcome: '유효·최초', payout: { state: '확정', amount: 15000, lockedAt: '2026-09-17T09:00:00+09:00' }, assignee: '최민아' },
   { id: '#1121', store: '성수점', customer: '최유나', customerKey: 'C-최유나', category: '비식품', sku: 'SKU-F01', unit: 'u1', defectType: '통로 적재물', submittedAt: '2026-09-17T10:30:00+09:00', evidenceOk: true, process: '접수', outcome: null, payout: { state: '미정', amount: null } },
-  { id: '#1188', store: '성수점', customer: '정우진', customerKey: 'C-정우진', category: '생활용품', sku: 'SKU-E88', unit: 'u1', defectType: '가격표 오류', submittedAt: '2026-09-23T11:00:00+09:00', evidenceOk: true, process: '접수', outcome: null, payout: { state: '미정', amount: null } },
+  { id: '#1188', store: '성수점', customer: '정우진', customerKey: 'C-정우진', category: '생활용품', sku: 'SKU-E88', unit: 'u1', defectType: '가격표 오류', submittedAt: '2026-09-17T14:20:00+09:00', evidenceOk: true, process: '접수', outcome: null, payout: { state: '미정', amount: null } },
 ];
 
 export const reports: Report[] = rows.map((r) => ({

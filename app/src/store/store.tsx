@@ -34,17 +34,22 @@ type Action =
 
 const ACTOR = '최민아';
 
-/** 링크로 특정 건을 연다. 해시 라우팅이라 질의는 해시 뒤에 붙는다(#/app?id=1063). */
-function queryId(): string | null {
+/** 링크로 특정 상태를 연다. 해시 라우팅이라 질의는 해시 뒤에 붙는다(#/app?id=1063). */
+function param(name: string): string | null {
   if (typeof location === 'undefined') return null;
   const fromHash = location.hash.includes('?') ? location.hash.slice(location.hash.indexOf('?') + 1) : '';
-  return new URLSearchParams(fromHash).get('id') ?? new URLSearchParams(location.search).get('id');
+  return new URLSearchParams(fromHash).get(name) ?? new URLSearchParams(location.search).get(name);
 }
-const q = queryId();
+const q = param('id');
+const STEP = (['현황', '편집', '영향 확인', '완료'] as const)
+  .find((v) => v === param('step')) ?? '현황';
 
 export const initial: State = {
   reports: seedReports, policies: seedPolicies, selected: q ? `#${q.replace('#', '')}` : null,
-  filter: null, query: '', toast: null, draft: null, step: '현황', now: NOW,
+  filter: null, query: param('q') ?? '', toast: null,
+  draft: STEP === '현황' ? null : { ...seedPolicies.find((p) => p.status === '발효')!, version: 'v3', status: '초안',
+    amounts: { ...seedPolicies.find((p) => p.status === '발효')!.amounts, '유통기한 경과': 5000 } },
+  step: STEP, now: NOW,
 };
 
 function put(s: State, id: string, f: (r: Report) => Report): Report[] {

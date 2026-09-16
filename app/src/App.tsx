@@ -119,15 +119,17 @@ function Site() {
   const go = (r: Route, s?: string) => { location.hash = `#/${r}${s ? `/${s}` : ''}`; };
 
   if (route === 'app') {
+    // 갤러리 캡처용 — 제품 화면만 남긴다
+    const bare = params.get('bare') === '1';
     return (
       <div className="app-shell">
-        <Nav route={route} go={go} />
-          <div className="doc-world app-frame">
+        {!bare && <Nav route={route} go={go} />}
+          {!bare && <div className="doc-world app-frame">
             <div className="app-note">
               <b>프로토타입 · 규칙이 실제로 계산됩니다</b>
               <span>목 데이터로 브라우저 안에서만 동작하고 새로고침하면 처음 상태로 돌아갑니다.</span>
             </div>
-          </div>
+          </div>}
         <Store><Console /></Store>
       </div>
     );
