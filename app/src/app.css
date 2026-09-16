@@ -202,9 +202,11 @@ table.basis tr.emph td { background: var(--iris-semantic-background-status-info)
 .app-shell [class*="iris-th-"] { height: 34px; padding: 0 12px; font-size: 11.5px; }
 /* 배지 — 톤은 그대로, 크기만 압축 */
 .app-shell [class*="iris-badge-"] { font-size: 11px; padding: 1px 6px; border-radius: 4px; }
-/* 버튼·입력 — 높이 한 단계 */
-.app-shell [class*="iris-button-"] { height: 34px; }
-.app-shell .panel [class*="iris-button-"] { height: 36px; }
+/* 버튼 — 크기 체계를 눌러 없애지 않고 한 단계씩만 조인다.
+   Iris 기본은 l 48 · m 36 · s 32. 주 행동은 여전히 가장 크다. */
+.app-shell [class*="iris-button-"][class*="iris-l-"] { height: 40px; font-size: 14.5px; }
+.app-shell [class*="iris-button-"][class*="iris-m-"] { height: 34px; }
+.app-shell [class*="iris-button-"][class*="iris-s-"] { height: 30px; }
 .app-shell [class*="iris-input-"] { --iris-input-height: 34px; font-size: 13.5px; }
 /* 셸 — 상단 두 줄을 조인다 */
 .app-shell .shell > [class*="iris-top"] { height: 52px; }
