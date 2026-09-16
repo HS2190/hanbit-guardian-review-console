@@ -55,13 +55,13 @@ export function Queue({ children }: { children: React.ReactNode }) {
         </div>
       ) : selected ? (
         <div className="workspace">
-          <aside className="rail">
-            <div className="rail-head">
+          <aside className="queue-rail">
+            <div className="queue-rail-head">
               <b>심사 큐 · {rows.length}건</b>
-              <button className="rail-expand" onClick={() => d({ t: 'select', id: null })}>목록 펼치기 ▸</button>
+              <button className="queue-rail-expand" onClick={() => d({ t: 'select', id: null })}>목록 펼치기 ▸</button>
             </div>
             {rows.map((r) => (
-              <button key={r.id} className={`rail-row${r.id === selected ? ' on' : ''}`}
+              <button key={r.id} className={`queue-rail-row${r.id === selected ? ' on' : ''}`}
                 onClick={() => d({ t: 'select', id: r.id })}>
                 <span className="rr-top"><b>{r.id}</b><ProcessBadge v={r.process} /></span>
                 <span className="rr-at">{fmt(r.submittedAt)}</span>
