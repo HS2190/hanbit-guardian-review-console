@@ -54,6 +54,8 @@ export function Detail({ r, onConfirm, onSupplement }: {
         </SectionMessage>
       )}
 
+      <div className="detail-body">
+      <div className="detail-col">
       <Card variant="outlined" className="summary">
         <div>
           <div className="overline">적용 정책 · {applied.version} ({fmt(applied.effectiveFrom)} 발효) · 잠김</div>
@@ -77,7 +79,6 @@ export function Detail({ r, onConfirm, onSupplement }: {
         </div>
       </Card>
 
-      <div className="detail-body">
         <div className="detail-main">
       <Rail label="① 접수 근거">
         <Table
@@ -160,6 +161,7 @@ ${noticePayout(r, done)}
       </Rail>
 
         </div>
+      </div>
       <div className="panel-col">
       <Card variant="outlined" className="panel">
         <SectionHeader title="판정" />

@@ -121,6 +121,9 @@ main { padding: var(--iris-space-24); }
 /* Iris Table의 td·th만 타이포 클래스를 쓰지 않아 keep-all이 빠져 있다
    (.iris-label-2 등은 전부 keep-all). 시스템이 의도한 상태로 맞춘다 —
    1280에서 "송지|아" "유통기한 경|과"처럼 이름이 잘리던 것. */
+/* 한국어는 기본값이 음절 단위로 끊긴다. 아이리스 타이포 클래스는 keep-all을
+   갖지만 이 파일의 자체 클래스(.sub .overline .amount …)에는 없다 — 셸 전체에 건다. */
+.shell { word-break: keep-all; overflow-wrap: break-word; }
 .shell [class*="iris-td-"], .shell [class*="iris-th-"] { word-break: keep-all; }
 
 /* 목록 안에서도 열 머리는 붙어 있는다 */
@@ -159,11 +162,11 @@ main { padding: var(--iris-space-24); }
   background: var(--iris-semantic-background-normal-alternative);
 }
 /* ── 적용 정책 ──────────────────────────────────────────────
-   산정·다음 행동을 좁혀서 아래 판정 열과 폭을 맞춘다. 두 칸이 150 + 틈 16이면
-   본문이 1fr인 한 화면 폭과 무관하게 판정 열의 왼쪽 모서리와 정확히 떨어진다. */
-.summary { margin-top: var(--iris-space-16); }
+   본문(접수 근거) 박스와 같은 열에 두어 폭을 맞춘다. 판정은 그 오른쪽 위. */
+.detail-col { display: grid; gap: var(--iris-space-16); min-width: 0; align-content: start; }
+.summary { margin-top: 0; }
 .summary > [class*="iris-body-"] {
-  grid-template-columns: minmax(0, 1fr) 150px 150px;
+  grid-template-columns: 1.6fr 1fr 1fr;
   column-gap: var(--iris-space-16);
   padding: var(--iris-space-20) var(--iris-space-24);
 }
