@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, Button, Divider, Radio, Select, TextField } from '@hs2190.an/iris-react';
+import { Button, Card, Divider, ListCell, Radio, SectionHeader, SectionMessage, Select, Table, TextButton, TextField } from '@hs2190.an/iris-react';
 import { useStore } from '../store/store';
 import { appliedPolicy, currentPolicy } from '../domain/policy';
 import { duplicateCandidates, judge } from '../domain/rules';
@@ -35,14 +35,13 @@ export function Detail({ r, onConfirm, onSupplement }: {
       </header>
 
       {j.blocked && (
-        <div className="alert-wrap">
-          <Alert title="확정 차단 — 같은 고객의 선행 건 판정 필요">
-            {j.blocked.reason}. 선행 건이 확정되거나 무효가 되어야 이 건의 금액이 정해집니다.
-          </Alert>
-        </div>
+        <SectionMessage tone="cautionary" className="alert-wrap"
+          title="확정 차단 — 같은 고객의 선행 건 판정 필요">
+          {j.blocked.reason}. 선행 건이 확정되거나 무효가 되어야 이 건의 금액이 정해집니다.
+        </SectionMessage>
       )}
 
-      <section className="summary">
+      <Card variant="outlined" className="summary">
         <div>
           <div className="overline">적용 정책 · {applied.version} ({fmt(applied.effectiveFrom)} 발효) · 잠김</div>
           <div className="amount">{r.defectType} {won(basis)}원</div>
@@ -63,37 +62,37 @@ export function Detail({ r, onConfirm, onSupplement }: {
           <div className="amount-sm">{nextAction(r, j.blocked?.reason)}</div>
           <div className="sub">{done ? '확정 후 자동 재계산 없음' : '판정 패널에서 진행합니다'}</div>
         </div>
-      </section>
+      </Card>
 
       <div className="detail-body">
         <div className="detail-main">
       <Rail label="① 접수 근거">
-        <table className="basis">
-          <thead>
-            <tr><th>항목</th><th>적용 {applied.version} ({day(applied.effectiveFrom)})</th><th>현재 {current.version} · 비교</th></tr>
-          </thead>
-          <tbody>
-            <tr className="emph">
-              <td>{r.defectType}</td><td>{won(basis)}</td>
-              <td className="muted">{basis === current.amounts[r.defectType] ? '—' : won(current.amounts[r.defectType])}</td>
-            </tr>
-            <tr><td>대상 카테고리</td><td>{applied.categories.join(' · ')}</td><td className="muted">—</td></tr>
-            <tr><td>1인 한도</td><td>{won(applied.perPersonCap)}</td><td className="muted">—</td></tr>
-            {showAll && DEFECTS.filter((k) => k !== r.defectType).map((k) => (
-              <tr key={k}>
-                <td>{k}</td><td>{won(applied.amounts[k])}</td>
-                <td className="muted">{applied.amounts[k] === current.amounts[k] ? '—' : won(current.amounts[k])}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button className="more" onClick={() => setShowAll(!showAll)}>
+        <Table
+          columns={[
+            { key: 'k', header: '항목' },
+            { key: 'a', header: `적용 ${applied.version} (${day(applied.effectiveFrom)})` },
+            { key: 'c', header: `현재 ${current.version} · 비교` },
+          ]}
+          data={[
+            {
+              k: <b>{r.defectType}</b>,
+              a: <b>{won(basis)}</b>,
+              c: <span className="muted">{basis === current.amounts[r.defectType] ? '—' : won(current.amounts[r.defectType])}</span>,
+            },
+            { k: '대상 카테고리', a: applied.categories.join(' · '), c: <span className="muted">—</span> },
+            { k: '1인 한도', a: won(applied.perPersonCap), c: <span className="muted">—</span> },
+            ...(showAll ? DEFECTS.filter((k) => k !== r.defectType).map((k) => ({
+              k, a: won(applied.amounts[k]),
+              c: <span className="muted">{applied.amounts[k] === current.amounts[k] ? '—' : won(current.amounts[k])}</span>,
+            })) : []),
+          ]} />
+        <TextButton size="s" onClick={() => setShowAll(!showAll)}>
           {showAll ? '다른 결함 유형 접기' : `다른 결함 유형 ${DEFECTS.length - 1}항목 펼치기`}
-        </button>
+        </TextButton>
       </Rail>
 
       <Rail label="② 증빙 · 유효성 평가">
-        <div className="evidence">{r.evidenceNote ?? '사진 2장 · 라벨 판독 가능'}</div>
+        <Card variant="filled" className="evidence">{r.evidenceNote ?? '사진 2장 · 라벨 판독 가능'}</Card>
         <div className="radios">
           <Radio name={`ev-${r.id}`} label="증빙 확인됨 — 유효성 통과" checked={r.evidenceOk}
             disabled={done} onChange={() => d({ t: 'evidence', id: r.id, ok: true })} />
@@ -106,19 +105,19 @@ export function Detail({ r, onConfirm, onSupplement }: {
         {cands.length === 0
           ? <p className="muted">후보 없음 — 최초 유효 판정 진행 가능</p>
           : (
-            <ul className="cands">
+            <div className="cands">
               {cands.map((c) => (
-                <li key={c.id}>
-                  <span>{c.id} · {fmt(c.submittedAt)} 접수 · {c.customer} · {c.outcome ?? '미판정'}</span>
-                  {!done && (
+                <ListCell key={c.id}
+                  title={`${c.id} · ${c.customer}`}
+                  description={`${fmt(c.submittedAt)} 접수 · ${c.outcome ?? '미판정'}`}
+                  trailing={!done && (
                     <Button size="s" variant="outlined" color="assistive"
                       onClick={() => d({ t: 'duplicate', id: r.id, originId: c.id, reason: '같은 개체·같은 결함' })}>
-                      {c.id}를 원본으로 중복 판정
+                      원본으로 지정
                     </Button>
-                  )}
-                </li>
+                  )} />
               ))}
-            </ul>
+            </div>
           )}
       </Rail>
 
@@ -139,17 +138,18 @@ ${noticePayout(r, done)}
 
       <Rail label="⑥ 활동 이력" tone="secondary"
         summary={`${r.history.length}건`}>
-        <ul className="history">
+        <div className="history">
           {r.history.map((h, i) => (
-            <li key={i}><b>{fmt(h.at)}</b> {h.action}{h.after ? ` · ${h.after}` : ''}{h.actor ? ` · ${h.actor}` : ''}</li>
+            <ListCell key={i} title={h.action}
+              description={`${fmt(h.at)}${h.after ? ` · ${h.after}` : ''}${h.actor ? ` · ${h.actor}` : ''}`} />
           ))}
-        </ul>
+        </div>
       </Rail>
 
         </div>
       <div className="panel-col">
-      <aside className="panel">
-        <h3>판정</h3>
+      <Card variant="outlined" className="panel">
+        <SectionHeader title="판정" />
         {done ? (
           <p className="muted">확정되었습니다. 금액과 한도는 잠겼고 자동 재계산은 없습니다.</p>
         ) : (
@@ -167,16 +167,16 @@ ${noticePayout(r, done)}
               <Button size="l" onClick={() => d({ t: 'start', id: r.id })}>심사 착수</Button>
             )}
             {r.process !== '접수' && j.blocked && (
-              <div className="block-card">
-                <b>확정 불가 — {j.blocked.reason}</b>
-                <p>선행 건을 먼저 판정하면 이 건의 금액이 정해집니다.</p>
+              <SectionMessage tone="cautionary" className="block-card"
+                title={`확정 불가 — ${j.blocked.reason}`}>
+                선행 건을 먼저 판정하면 이 건의 금액이 정해집니다.
                 {j.blocked.targetId && (
                   <Button size="m" variant="outlined" color="assistive"
                     onClick={() => d({ t: 'select', id: j.blocked!.targetId! })}>
                     선행 건 {j.blocked.targetId} 열기
                   </Button>
                 )}
-              </div>
+              </SectionMessage>
             )}
             {r.process !== '접수' && !j.blocked && (
               <Button size="l" leadingIcon="lock" onClick={onConfirm}>
@@ -196,7 +196,7 @@ ${noticePayout(r, done)}
             보완 요청 {fmt(r.supplement.requestedAt)} 발송 · 기한 {fmt(r.supplement.dueAt)} · {r.supplement.submitted ? '제출됨' : '제출 없음'}
           </p>
         )}
-      </aside>
+      </Card>
       </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { FallbackView, FilterButton, SearchField, Table } from '@hs2190.an/iris-react';
+import { Card, ContentBadge, FallbackView, FilterButton, ListCell, SearchField, Table, TextButton } from '@hs2190.an/iris-react';
 import { useStore } from '../store/store';
 import { appliedPolicy, currentPolicy } from '../domain/policy';
 import { blockingPredecessor } from '../domain/rules';
@@ -55,19 +55,21 @@ export function Queue({ children }: { children: React.ReactNode }) {
         </div>
       ) : selected ? (
         <div className="workspace">
-          <aside className="queue-rail">
+          <Card variant="outlined" className="queue-rail">
             <div className="queue-rail-head">
               <b>심사 큐 · {rows.length}건</b>
-              <button className="queue-rail-expand" onClick={() => d({ t: 'select', id: null })}>목록 펼치기 ▸</button>
+              <TextButton size="s" trailingIcon="chevron-right"
+                onClick={() => d({ t: 'select', id: null })}>목록 펼치기</TextButton>
             </div>
             {rows.map((r) => (
-              <button key={r.id} className={`queue-rail-row${r.id === selected ? ' on' : ''}`}
-                onClick={() => d({ t: 'select', id: r.id })}>
-                <span className="rr-top"><b>{r.id}</b><ProcessBadge v={r.process} /></span>
-                <span className="rr-at">{fmt(r.submittedAt)}</span>
-              </button>
+              <ListCell key={r.id} interactive
+                className={r.id === selected ? 'on' : undefined}
+                onClick={() => d({ t: 'select', id: r.id })}
+                title={r.id}
+                description={fmt(r.submittedAt)}
+                trailing={<ProcessBadge v={r.process} />} />
             ))}
-          </aside>
+          </Card>
           <div className="preview">{children}</div>
         </div>
       ) : (
@@ -105,10 +107,10 @@ function FullTable({ rows }: { rows: Report[] }) {
         const p = appliedPolicy(s.policies, r.submittedAt);
         const differs = p.version !== current.version && p.amounts[r.defectType] !== current.amounts[r.defectType];
         return {
-          id: <button className={`row-id${s.selected === r.id ? ' on' : ''}`}>{r.id}</button>,
+          id: <TextButton size="s" className={s.selected === r.id ? 'row-id on' : 'row-id'}>{r.id}</TextButton>,
           at: fmt(r.submittedAt), cu: r.customer, df: r.defectType,
           am: won(p.amounts[r.defectType]),
-          po: <span className="pol">{p.version}{differs && <em className="diff">적용 ≠ 현재</em>}</span>,
+          po: <span className="pol">{p.version}{differs && <ContentBadge tone="cautionary" variant="subtle">적용 ≠ 현재</ContentBadge>}</span>,
           pr: <ProcessBadge v={r.process} />,
           hd: <HoldReason r={r} />,
           rs: <OutcomeBadge v={r.outcome} dupOf={r.duplicateOf} />,
@@ -135,5 +137,6 @@ function HoldReason({ r }: { r: Report }) {
 }
 
 export function QueueEmptyPreview() {
-  return <div className="preview-empty"><b>목록에서 건을 선택하세요</b></div>;
+  return <FallbackView icon="search" title="목록에서 건을 선택하세요"
+    description="선택하면 접수 근거와 산정과 판정이 이 자리에 열립니다." />;
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Popup, Tabs, TextField, Toast, TopNavigation } from '@hs2190.an/iris-react';
+import { Button, Popup, Scrim, Tabs, TextField, Toast, TopNavigation } from '@hs2190.an/iris-react';
 import { Store, useStore } from './store/store';
 import { Queue, QueueEmptyPreview } from './ui/Queue';
 import { Detail } from './ui/Detail';
@@ -59,7 +59,7 @@ function Console() {
       </main>
 
       {dialog === 'confirm' && selected && j && (
-        <div className="scrim" onClick={() => setDialog(null)}>
+        <div className="scrim" onClick={() => setDialog(null)}><Scrim />
           <div onClick={(e) => e.stopPropagation()}>
             <Popup
               title={j.amount === 0 ? `${j.outcome} · 0원으로 확정` : `지급 확정 — ${won(j.amount)}원`}
@@ -81,7 +81,7 @@ function Console() {
       )}
 
       {dialog === 'supplement' && selected && (
-        <div className="scrim" onClick={() => setDialog(null)}>
+        <div className="scrim" onClick={() => setDialog(null)}><Scrim />
           <div onClick={(e) => e.stopPropagation()}>
             <Popup title="보완 요청" onClose={() => setDialog(null)}
               footer={
