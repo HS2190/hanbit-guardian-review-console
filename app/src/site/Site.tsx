@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { marked } from 'marked';
 import { ALL_DOCS, APPENDIX, DOCS, SHOTS, loadDoc } from './docs';
 import { Reveal } from './motion';
+import { Lightbox } from './Lightbox';
 import { HeroTimeline } from './HeroTimeline';
 
 const FIGMA = 'https://www.figma.com/design/riBWYMkoDYOWaRlTkggqnK/';
@@ -132,19 +133,26 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
 }
 
 export function Screens() {
+  const [open, setOpen] = useState<number | null>(null);
+  const base = import.meta.env.BASE_URL;
+
   return (
     <section className="band">
       <div className="grid">
         <div className="col-4"><span className="label">화면</span><h2>무엇을 보면 되는가</h2>
-          <p>아래 아홉 장은 배포된 프로토타입에서 그대로 찍은 것입니다. 전체 화면 서른세 장과 설계 정본은 Figma에 있습니다.</p>
+          <p>아래 아홉 장은 배포된 프로토타입에서 그대로 찍은 것입니다. 눌러서 크게 볼 수 있습니다. 전체 화면 서른세 장과 설계 정본은 Figma에 있습니다.</p>
           <a className="cta ghost" href={FIGMA} target="_blank" rel="noreferrer">Figma에서 전체 보기 ↗</a>
         </div>
         <div className="col-7">
           <div className="shots">
-            {SHOTS.map((s) => (
+            {SHOTS.map((s, i) => (
               <div className="shot" key={s.file}>
                 <figure>
-                  <img src={`${import.meta.env.BASE_URL}screens/${s.file}`} alt={s.label} loading="lazy" />
+                  <button type="button" className="shot-open"
+                    aria-label={`${s.label} 크게 보기`} onClick={() => setOpen(i)}>
+                    <img src={`${base}screens/${s.file}`} alt={s.label} loading="lazy" />
+                    <span className="shot-zoom" aria-hidden>크게 보기</span>
+                  </button>
                   <figcaption><span className="cap-label">{s.label}</span>{s.cap}</figcaption>
                 </figure>
               </div>
@@ -152,6 +160,11 @@ export function Screens() {
           </div>
         </div>
       </div>
+
+      {open !== null && (
+        <Lightbox shots={SHOTS} index={open} base={base}
+          onClose={() => setOpen(null)} onMove={setOpen} />
+      )}
     </section>
   );
 }

@@ -329,3 +329,64 @@ footer.site { border-top: 1px solid var(--rule); padding: 40px 0 64px; font-size
   .metric + .metric { border-left: 0; padding-left: 0; }
   .decisions { grid-template-columns: 1fr 1fr; }
 }
+
+/* ═══ 화면 · 크게 보기 ═══════════════════════════════════════
+   1440px UI는 갤러리 크기에서 글자가 읽히지 않는다. 눌러서 실제 크기에 가깝게 본다. */
+.shot-open { display: block; width: 100%; padding: 0; border: 0; background: none;
+  cursor: zoom-in; position: relative; border-radius: 12px; overflow: hidden; }
+.shot-open img { transition: transform var(--mo-dur) var(--mo-ease); }
+.shot-open:hover img { transform: scale(1.012); }
+.shot-open:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.shot-zoom { position: absolute; right: 12px; bottom: 12px; padding: 6px 11px;
+  border-radius: 999px; background: rgba(10,11,13,.82); color: #fff;
+  font-size: 11.5px; font-weight: 600; letter-spacing: -.01em;
+  opacity: 0; transform: translateY(4px);
+  transition: opacity var(--mo-dur-micro) ease-out, transform var(--mo-dur-micro) ease-out; }
+.shot-open:hover .shot-zoom, .shot-open:focus-visible .shot-zoom { opacity: 1; transform: none; }
+
+.lb { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center;
+  padding: 28px 32px 88px; background: rgba(6,7,9,.94);
+  /* body에 직접 띄우므로 문서 세계의 서체·색을 상속받지 못한다 */
+  font-family: var(--display); color: var(--ink); color-scheme: dark;
+  backdrop-filter: blur(18px) saturate(.9); -webkit-backdrop-filter: blur(18px) saturate(.9);
+  animation: lb-in 200ms ease-out both; cursor: zoom-out; }
+@keyframes lb-in { from { opacity: 0; } to { opacity: 1; } }
+
+.lb-body { margin: 0; max-width: min(1440px, 100%); cursor: default;
+  animation: lb-rise 260ms cubic-bezier(.16,1,.3,1) both; }
+@keyframes lb-rise { from { opacity: 0; transform: scale(.985) translateY(8px); } to { opacity: 1; transform: none; } }
+.lb-body img { width: 100%; height: auto; max-height: calc(100vh - 160px); object-fit: contain;
+  border: 1px solid var(--rule); border-radius: 10px; background: var(--paper-raised); }
+.lb-body figcaption { margin-top: 14px; display: flex; gap: 12px; align-items: baseline;
+  font-size: 13px; color: var(--ink-2); line-height: 1.7; }
+.lb-label { flex: 0 0 auto; color: var(--ink); font-weight: 700; }
+.lb-cap { min-width: 0; }
+
+.lb-bar { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 6px; padding: 5px;
+  border-radius: 999px; background: rgba(20,22,27,.94);
+  border: 1px solid var(--rule); cursor: default; }
+.lb-nav, .lb-close { height: 34px; border: 0; border-radius: 999px; background: none;
+  color: var(--ink-2); font-size: 14px; cursor: pointer;
+  transition: background var(--mo-dur-micro) ease, color var(--mo-dur-micro) ease; }
+.lb-nav { width: 34px; }
+.lb-close { padding: 0 14px; font-size: 13px; font-weight: 600; display: inline-flex;
+  align-items: center; gap: 7px; }
+.lb-nav:hover, .lb-close:hover { background: rgba(255,255,255,.10); color: var(--ink); }
+.lb-nav:focus-visible, .lb-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.lb-count { font-size: 12.5px; color: var(--ink-3); padding: 0 6px;
+  font-variant-numeric: tabular-nums; }
+.lb-close kbd { font: inherit; font-size: 11px; color: var(--ink-3);
+  border: 1px solid var(--rule); border-radius: 4px; padding: 1px 5px; }
+
+@media (max-width: 900px) {
+  .lb { padding: 16px 16px 84px; }
+  .lb-body img { max-height: calc(100vh - 170px); }
+  .lb-body figcaption { flex-direction: column; gap: 4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lb, .lb-body { animation: none; }
+  .shot-open img { transition: none; }
+  .shot-open:hover img { transform: none; }
+  .shot-zoom { transition: none; }
+}
