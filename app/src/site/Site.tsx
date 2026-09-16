@@ -16,7 +16,7 @@ export function Nav({ route, go, doc }: { route: Route; go: (r: Route, slug?: st
     <nav className="site-nav">
       <div className="inner">
         <span className="mark">한빛마트 지킴이</span>
-        {item('overview', '개요')}{item('screens', '화면')}{item('docs', '문서')}{item('app', '프로토타입')}
+        {item('overview', '개요')}{item('docs', '문서')}{item('screens', '화면')}{item('app', '프로토타입')}
         <span className="right">
           <a href={FIGMA} target="_blank" rel="noreferrer">Figma ↗</a>
           <a href={REPO} target="_blank" rel="noreferrer">GitHub ↗</a>
@@ -24,6 +24,15 @@ export function Nav({ route, go, doc }: { route: Route; go: (r: Route, slug?: st
       </div>
       {doc && <span hidden>{doc}</span>}
     </nav>
+  );
+}
+
+export function Rails() {
+  return (
+    <div className="rails" aria-hidden>
+      <span className="rail l" /><span className="rail r" />
+      <span className="mark-sq tl" /><span className="mark-sq tr" />
+    </div>
   );
 }
 
@@ -69,18 +78,21 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
 
       <section className="band">
         <div className="grid">
-          <div className="col-4"><span className="label">한 수</span><h2>고를 수 있다는 것<br />자체를 없앴다</h2></div>
-          <div className="col-7">
-            <div className="move">
-              <q>적용 정책은 접수 시각의 발효 버전으로 정해지고, 심사자는 그것을 선택할 수 없다.</q>
+          <div className="col-12">
+            <div className="feature">
+              <div className="feature-head">
+                <span className="label accent">한 수</span>
+                <h2>고를 수 있다는 것 자체를 없앴다</h2>
+                <q>적용 정책은 접수 시각의 발효 버전으로 정해지고, 심사자는 그것을 선택할 수 없다.</q>
+                <p>심사자에게 재량을 더 주는 대신 선택지를 없앴습니다. 오류의 원인이 부주의가 아니라 선택지의 존재라고 봤기 때문입니다.</p>
+              </div>
+              <div className="feature-cards">
+                <div className="mini"><span className="n">01</span><b>상태를 세 축으로 쪼갰다</b><span>처리·결과·지급이 한 배지에 섞이면 "유효한데 한도 때문에 0원"이 반려로 읽힌다.</span></div>
+                <div className="mini"><span className="n">02</span><b>판정 순서를 고정했다</b><span>범위 → 유효성 → 중복 → 최초 여부 → 한도. 순서가 흔들리면 같은 사건이 다른 결과를 낸다.</span></div>
+                <div className="mini"><span className="n">03</span><b>선행 건이 있으면 확정을 막는다</b><span>처리 순서가 총액을 바꾸지 않도록 접수순으로 배정한다. 대가인 대기를 화면에 드러낸다.</span></div>
+                <div className="mini"><span className="n">04</span><b>바꾸기 전에 영향을 본다</b><span>이미 접수된 건이 몇 건이고 얼마가 줄지 않는지를 보여준 다음에 발행 버튼이 열린다.</span></div>
+              </div>
             </div>
-            <p style={{ marginTop: 18 }}>심사자에게 재량을 더 주는 대신 선택지를 없앴습니다. 오류의 원인이 부주의가 아니라 선택지의 존재라고 봤기 때문입니다. 여기서 네 가지가 따라 나옵니다.</p>
-            <ul className="consequences">
-              <li><span className="n">01</span><div><b>상태를 세 축으로 쪼갰다</b><span>처리·결과·지급이 한 배지에 섞이면 "유효한데 한도 때문에 0원"이 반려로 읽힌다.</span></div></li>
-              <li><span className="n">02</span><div><b>판정 순서를 다섯 단계로 고정했다</b><span>범위 → 유효성 → 중복 → 최초 여부 → 한도. 순서가 흔들리면 같은 사건이 다른 결과를 낸다.</span></div></li>
-              <li><span className="n">03</span><div><b>선행 건이 미판정이면 확정을 막는다</b><span>처리 순서가 총액을 바꾸지 않도록 접수순으로 배정한다. 대가는 대기이고, 그 대기를 화면에 드러낸다.</span></div></li>
-              <li><span className="n">04</span><div><b>바꾸기 전에 영향을 먼저 본다</b><span>이미 접수된 건이 몇 건이고 얼마가 줄지 않는지를 숫자로 보여준 다음에 발행 버튼이 열린다.</span></div></li>
-            </ul>
           </div>
         </div>
       </section>
@@ -90,11 +102,11 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
           <div className="col-4"><span className="label">확인</span><h2>말보다 눌러 보는 쪽이 빠릅니다</h2></div>
           <div className="col-7">
             <p>프로토타입은 화면 전환 흉내가 아니라 규칙이 실제로 계산됩니다. 목 데이터로 브라우저 안에서만 돌고, 새로고침하면 처음 상태로 돌아갑니다.</p>
-            <ul className="consequences">
-              <li><span className="n">→</span><div><b>접수 시각이 기준이라는 것</b><span>#1042는 9/15 09:47 접수라 v1의 30,000원이 적용된다. 36분 뒤 v2가 발효했지만 이 건은 바뀌지 않는다.</span></div></li>
-              <li><span className="n">→</span><div><b>선행 건이 막는다는 것</b><span>#1063은 같은 고객의 #1042가 미판정이라 확정이 막혀 있다. #1042를 확정하면 잔여 한도로 열린다.</span></div></li>
-              <li><span className="n">→</span><div><b>유효한데 0원</b><span>한도를 다 쓴 고객의 새 제보는 결과가 유효로 남고 지급만 해당 없음이 된다.</span></div></li>
-            </ul>
+            <div className="try-cards">
+              <div className="mini light"><b>접수 시각이 기준이라는 것</b><span>#1042는 9/15 09:47 접수라 v1의 30,000원이 적용된다. 36분 뒤 v2가 발효했지만 이 건은 바뀌지 않는다.</span></div>
+              <div className="mini light"><b>선행 건이 막는다는 것</b><span>#1063은 같은 고객의 #1042가 미판정이라 확정이 막혀 있다. #1042를 확정하면 잔여 한도로 열린다.</span></div>
+              <div className="mini light"><b>유효한데 0원</b><span>한도를 다 쓴 고객의 새 제보는 결과가 유효로 남고 지급만 해당 없음이 된다.</span></div>
+            </div>
             <div className="cta-row"><a className="cta" href="#/app" onClick={(e) => { e.preventDefault(); go('app'); }}>프로토타입 열기</a></div>
           </div>
         </div>
@@ -104,11 +116,11 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
         <div className="grid">
           <div className="col-4"><span className="label">한계</span><h2>검증하지 못한 것</h2></div>
           <div className="col-7">
-            <ul className="consequences">
-              <li><span className="n">01</span><div><b>사용자 검증 0회</b><span>적용 정책을 고를 수 없게 만든 것이 심사자에게 방해가 아니라 안심으로 느껴지는지가 첫 검증 항목이다.</span></div></li>
-              <li><span className="n">02</span><div><b>보완 1회·기한 7일은 가설</b><span>운영 데이터로 정할 값이다.</span></div></li>
-              <li><span className="n">03</span><div><b>동시 편집 잠금 없음</b><span>먼저 확정한 쪽이 이기고 뒤늦은 저장은 실패 안내를 받는다.</span></div></li>
-            </ul>
+            <div className="try-cards">
+              <div className="mini light"><b>사용자 검증 0회</b><span>적용 정책을 고를 수 없게 만든 것이 심사자에게 방해가 아니라 안심으로 느껴지는지가 첫 검증 항목이다.</span></div>
+              <div className="mini light"><b>보완 1회 · 기한 7일은 가설</b><span>운영 데이터로 정할 값이다.</span></div>
+              <div className="mini light"><b>동시 편집 잠금 없음</b><span>먼저 확정한 쪽이 이기고 뒤늦은 저장은 실패 안내를 받는다.</span></div>
+            </div>
             <p>과정과 근거는 <a href="#/docs" onClick={(e) => { e.preventDefault(); go('docs'); }}>문서 14편</a>에 그대로 있습니다. 검수에서 무엇이 잡혔고 무엇을 받아들이지 않았는지도 함께 적었습니다.</p>
           </div>
         </div>

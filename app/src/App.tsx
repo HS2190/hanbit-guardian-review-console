@@ -8,7 +8,7 @@ import { judge } from './domain/rules';
 import { won } from './ui/bits';
 import './app.css';
 import './site/theme.css';
-import { Docs, Footer, Nav, Overview, Screens, type Route } from './site/Site';
+import { Docs, Footer, Nav, Overview, Rails, Screens, type Route } from './site/Site';
 
 type Tab = '심사 큐' | '정책';
 
@@ -131,6 +131,7 @@ function Site() {
         </div>
       ) : (
         <div className="doc-world">
+          <Rails />
           {route === 'overview' && <Overview go={go} />}
           {route === 'screens' && <Screens />}
           {route === 'docs' && <Docs slug={slug || '00-assignment'} go={go} />}
