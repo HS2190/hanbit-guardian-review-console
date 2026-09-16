@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
 /**
  * 문서 세계의 진입 모션. 규칙은 셋뿐이다.
@@ -47,29 +47,5 @@ export function Reveal({ className, children, delay, stagger = true }: {
     <div ref={ref} className={cls} style={delay ? ({ '--d': `${delay}ms` } as CSSProperties) : undefined}>
       {children}
     </div>
-  );
-}
-
-/**
- * 히어로 제목만 쓰는 단어 단위 등장.
- * 글자가 아니라 어절 단위라야 차분하게 읽힌다. 읽어 주는 기계에는 원문 한 줄로 준다.
- */
-export function WordReveal({ lines, className }: { lines: string[]; className?: string }) {
-  const [ref, inView] = useInView<HTMLHeadingElement>();
-  let n = 0;
-  return (
-    <h1 ref={ref} className={['word-reveal', className, inView ? 'in' : ''].filter(Boolean).join(' ')}
-      aria-label={lines.join(' ')}>
-      {lines.map((line, li) => (
-        <span className="wr-line" key={li} aria-hidden>
-          {line.split(' ').map((w, wi) => (
-            <Fragment key={wi}>
-              {wi > 0 && ' '}
-              <span className="wr-word" style={{ '--wi': n++ } as CSSProperties}>{w}</span>
-            </Fragment>
-          ))}
-        </span>
-      ))}
-    </h1>
   );
 }

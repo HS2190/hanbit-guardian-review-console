@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { marked } from 'marked';
 import { ALL_DOCS, APPENDIX, DOCS, SHOTS, loadDoc } from './docs';
-import { Reveal, WordReveal } from './motion';
+import { Reveal } from './motion';
+import { HeroTimeline } from './HeroTimeline';
 
 const FIGMA = 'https://www.figma.com/design/riBWYMkoDYOWaRlTkggqnK/';
 
@@ -40,63 +41,58 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
     <>
       <section className="band hero-band">
         <div className="grid">
-          <Reveal className="col-12" stagger={false}>
-            <span className="label">프로덕트 디자이너 사전 과제 · 2026.09.14 — 09.18</span>
-          </Reveal>
-          <div className="col-9">
-            <WordReveal lines={['심사하는 동안 규칙이 바뀌어도,', '고객이 본 조건 그대로 심사되게']} />
-          </div>
-          <Reveal className="col-5 hero-sub" delay={340}>
-            <p className="lead">
-              심사 대기 중에 정책이 바뀌면 고객은 제출할 때 본 것과 다른 돈을 받습니다.
-              관리자 백오피스를 다시 설계해 그 일이 일어나지 않게 만들었습니다.
+          <div className="col-6 hero-txt">
+            <div className="kick fu" style={{ animationDelay: '40ms' }}>프로덕트 디자이너 사전 과제 · 트랙 B · 2026.09.14 — 09.18</div>
+            <h1 className="fu" style={{ animationDelay: '110ms' }}>심사하는 동안 규칙이 바뀌어도,<br />고객이 본 조건 그대로</h1>
+            <p className="lede fu" style={{ animationDelay: '220ms' }}>
+              제보를 받아 리워드를 주는 이벤트에서 정책은 도중에 바뀌고, 제출과 지급 사이에는 수일이 걸립니다.
+              그 사이를 고객이 부담하지 않도록 관리자 백오피스를 다시 설계했습니다.
             </p>
-            <div className="cta-row">
+            <div className="cta-row fu" style={{ animationDelay: '320ms' }}>
               <a className="cta" href="#/app" onClick={(e) => { e.preventDefault(); go('app'); }}>프로토타입 열기</a>
               <a className="cta ghost" href="#/screens" onClick={(e) => { e.preventDefault(); go('screens'); }}>화면 보기</a>
             </div>
+          </div>
+          <div className="col-6 hero-graphic"><HeroTimeline /></div>
+        </div>
+      </section>
+
+      <div className="metrics">
+        <Reveal className="grid">
+          <div className="metric"><b>33</b><span>Figma 화면</span></div>
+          <div className="metric"><b>10</b><span>설계 문서</span></div>
+          <div className="metric"><b>5일</b><span>작업 기간</span></div>
+          <div className="metric"><b>1명</b><span>정의부터 구현까지</span></div>
+        </Reveal>
+      </div>
+
+      <section className="band">
+        <div className="grid">
+          <Reveal className="col-12 move">
+            <span className="label">한 수</span>
+            <q>적용 정책은 <em>접수 시각의 발효 버전</em>으로 정해지고, 심사자는 그것을 선택할 수 없다.</q>
+            <p>심사자에게 재량을 더 주는 대신 선택지를 없앴습니다. 오류의 원인이 부주의가 아니라 선택지의 존재라고 봤기 때문입니다.</p>
           </Reveal>
-          <Reveal className="col-5 hero-facts" delay={460}>
-            <dl className="facts">
-              <div className="fact"><dt>트랙</dt><dd>관리자 백오피스 (고객 화면은 접점 3개 정의)</dd></div>
-              <div className="fact"><dt>기간</dt><dd>닷새</dd></div>
-              <div className="fact"><dt>산출</dt><dd>Figma 화면 33장 · 문서 10편 · 동작하는 프로토타입</dd></div>
-              <div className="fact"><dt>역할</dt><dd>문제 정의부터 화면·문구·구현까지 단독</dd></div>
-            </dl>
+          <Reveal className="col-12" stagger={false}>
+            <figure className="bigshot">
+              <img src={`${import.meta.env.BASE_URL}screens/02-detail.png`} alt="심사 상세 — 적용 정책이 첫 시선에 닿는 배치" />
+              <figcaption><b>심사 상세</b>첫 시선이 금액이 아니라 "어느 시점 기준인가"에 닿는다. #1042는 9/15 09:47 접수라 v1의 30,000원으로 잠겨 있고, 36분 뒤 발효한 v2는 이 건을 바꾸지 못한다.</figcaption>
+            </figure>
           </Reveal>
         </div>
       </section>
 
       <section className="band">
         <div className="grid">
-          <Reveal className="col-4">
-            <span className="label">문제</span>
-            <h2>기준이 둘이면<br />누가 성실해도 갈린다</h2>
-          </Reveal>
-          <Reveal className="col-7" delay={80}>
-            <p>정책은 이벤트 도중에 바뀌고, 제출과 지급 사이에는 수일에서 수주가 걸립니다. 그 사이에 금액이 내려가면 고객은 제출할 때 본 것과 다른 돈을 받습니다. 심사자도 이 제보가 어느 시점 기준인지 확인할 방법이 없어 지금 값으로 판단하게 됩니다.</p>
-            <p className="pull">겉으로는 금액 분쟁이지만, 실제로는 <strong>하나의 제보에 두 개의 기준이 존재할 수 있다는 것</strong>이 문제입니다.</p>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="band">
-        <div className="grid">
-          <Reveal className="col-12">
-            <div className="feature">
-              <div className="feature-head">
-                <span className="label accent">한 수</span>
-                <h2>고를 수 있다는 것 자체를 없앴다</h2>
-                <q>적용 정책은 접수 시각의 발효 버전으로 정해지고, 심사자는 그것을 선택할 수 없다.</q>
-                <p>오류의 원인이 부주의가 아니라 선택지의 존재라고 봤습니다.</p>
-              </div>
-              <div className="feature-cards stg">
-                <div className="mini"><span className="n">01</span><b>상태를 세 축으로 쪼갰다</b><span>처리·결과·지급이 한 배지에 섞이면 "유효한데 한도 때문에 0원"이 반려로 읽힌다.</span></div>
-                <div className="mini"><span className="n">02</span><b>판정 순서를 고정했다</b><span>범위 → 유효성 → 중복 → 최초 여부 → 한도. 순서가 흔들리면 같은 사건이 다른 결과를 낸다.</span></div>
-                <div className="mini"><span className="n">03</span><b>선행 건이 있으면 확정을 막는다</b><span>처리 순서가 총액을 바꾸지 않도록 접수순으로 배정한다. 대가인 대기를 화면에 드러낸다.</span></div>
-                <div className="mini"><span className="n">04</span><b>바꾸기 전에 영향을 본다</b><span>이미 접수된 건이 몇 건이고 얼마가 줄지 않는지를 보여준 다음에 발행 버튼이 열린다.</span></div>
-              </div>
-            </div>
+          <Reveal className="col-12 decisions">
+            {[
+              ['01', '상태를 세 축으로 쪼갰다', '처리·결과·지급이 한 배지에 섞이면 "유효한데 한도 때문에 0원"이 반려로 읽힌다.'],
+              ['02', '판정 순서를 고정했다', '범위 → 유효성 → 중복 → 최초 여부 → 한도. 순서가 흔들리면 같은 사건이 다른 결과를 낸다.'],
+              ['03', '선행 건이 있으면 확정을 막는다', '처리 순서가 총액을 바꾸지 않도록 접수순으로 배정한다. 대가인 대기를 화면에 드러낸다.'],
+              ['04', '바꾸기 전에 영향을 본다', '이미 접수된 건이 몇 건이고 얼마가 줄지 않는지를 보여준 다음에 발행 버튼이 열린다.'],
+            ].map(([n, t, d]) => (
+              <div className="dec" key={n}><span className="n">{n}</span><b>{t}</b><span>{d}</span></div>
+            ))}
           </Reveal>
         </div>
       </section>
@@ -110,9 +106,9 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
           <Reveal className="col-7" delay={80}>
             <p>규칙이 실제로 계산됩니다. 목 데이터로 브라우저 안에서만 돌고, 새로고침하면 처음 상태로 돌아갑니다.</p>
             <div className="try-cards stg">
-              <div className="mini light"><b>접수 시각이 기준이라는 것</b><span>#1042는 9/15 09:47 접수라 v1의 30,000원이 적용된다. 36분 뒤 v2가 발효했지만 이 건은 바뀌지 않는다.</span></div>
-              <div className="mini light"><b>선행 건이 막는다는 것</b><span>#1063은 같은 고객의 #1042가 미판정이라 확정이 막혀 있다. #1042를 확정하면 잔여 한도로 열린다.</span></div>
-              <div className="mini light"><b>유효한데 0원</b><span>한도를 다 쓴 고객의 새 제보는 결과가 유효로 남고 지급만 해당 없음이 된다.</span></div>
+              <div className="mini"><b>접수 시각이 기준이라는 것</b><span>#1042는 9/15 09:47 접수라 v1의 30,000원이 적용된다. 36분 뒤 v2가 발효했지만 이 건은 바뀌지 않는다.</span></div>
+              <div className="mini"><b>선행 건이 막는다는 것</b><span>#1063은 같은 고객의 #1042가 미판정이라 확정이 막혀 있다. #1042를 확정하면 잔여 한도로 열린다.</span></div>
+              <div className="mini"><b>유효한데 0원</b><span>한도를 다 쓴 고객의 새 제보는 결과가 유효로 남고 지급만 해당 없음이 된다.</span></div>
             </div>
             <div className="cta-row"><a className="cta" href="#/app" onClick={(e) => { e.preventDefault(); go('app'); }}>프로토타입 열기</a></div>
           </Reveal>
