@@ -34,7 +34,13 @@ type Action =
 
 const ACTOR = '최민아';
 
-const q = typeof location === 'undefined' ? null : new URLSearchParams(location.search).get('id');
+/** 링크로 특정 건을 연다. 해시 라우팅이라 질의는 해시 뒤에 붙는다(#/app?id=1063). */
+function queryId(): string | null {
+  if (typeof location === 'undefined') return null;
+  const fromHash = location.hash.includes('?') ? location.hash.slice(location.hash.indexOf('?') + 1) : '';
+  return new URLSearchParams(fromHash).get('id') ?? new URLSearchParams(location.search).get('id');
+}
+const q = queryId();
 
 export const initial: State = {
   reports: seedReports, policies: seedPolicies, selected: q ? `#${q.replace('#', '')}` : '#1042',

@@ -16,9 +16,12 @@ function readHash(): { route: Route; slug: string; query: URLSearchParams } {
   const raw = typeof location === 'undefined' ? '' : location.hash.replace(/^#\/?/, '');
   const [path, qs] = raw.split('?');
   const [head, tail] = path.split('/');
+  const search = typeof location === 'undefined' ? '' : location.search;
+  // 해시가 없고 질의만 있는 옛 링크(?id=1063)도 프로토타입으로 보낸다
+  const legacyApp = !raw && /[?&](id|tab)=/.test(search);
   const route: Route = (['overview', 'screens', 'docs', 'app'] as const).includes(head as Route)
-    ? (head as Route) : 'overview';
-  return { route, slug: tail ?? '', query: new URLSearchParams(qs ?? (typeof location === 'undefined' ? '' : location.search)) };
+    ? (head as Route) : legacyApp ? 'app' : 'overview';
+  return { route, slug: tail ?? '', query: new URLSearchParams(qs ?? search) };
 }
 
 const params = readHash().query;
@@ -116,20 +119,25 @@ function Site() {
 
   const go = (r: Route, s?: string) => { location.hash = `#/${r}${s ? `/${s}` : ''}`; };
 
-  return (
-    <>
-      <Nav route={route} go={go} />
-      {route === 'app' ? (
-        <div>
+  if (route === 'app') {
+    return (
+      <div className="app-shell">
+        <Nav route={route} go={go} />
           <div className="doc-world app-frame">
             <div className="app-note">
               <b>프로토타입 · 규칙이 실제로 계산됩니다</b>
               <span>목 데이터로 브라우저 안에서만 동작하고 새로고침하면 처음 상태로 돌아갑니다.</span>
             </div>
           </div>
-          <Store><Console /></Store>
-        </div>
-      ) : (
+        <Store><Console /></Store>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Nav route={route} go={go} />
+      {(
         <div className="doc-world">
           <Rails />
           {route === 'overview' && <Overview go={go} />}
