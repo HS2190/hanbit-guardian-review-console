@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Popup, TextField, Toast, TopNavigation } from '@hs2190.an/iris-react';
+import { Button, Popup, Tabs, TextField, Toast, TopNavigation } from '@hs2190.an/iris-react';
 import { Store, useStore } from './store/store';
 import { Queue, QueueEmptyPreview } from './ui/Queue';
 import { Detail } from './ui/Detail';
@@ -40,12 +40,11 @@ function Console() {
         title="한빛마트 지킴이"
         trailing={<span className="user">최민아 · 본사 심사</span>}
       />
-      <nav className="tabs">
-        {(['심사 큐', '정책'] as Tab[]).map((t) => (
-          <button key={t} className={tab === t ? 'tab on' : 'tab'} onClick={() => setTab(t)}>{t}</button>
-        ))}
+      <div className="tabbar">
+        <Tabs items={['심사 큐', '정책'] as const} value={tab}
+          onChange={(v) => setTab(v as Tab)} />
         <span className="ctx">성수점 · 2026 가을 매장 지킴이</span>
-      </nav>
+      </div>
 
       <main>
         {tab === '심사 큐' ? (
