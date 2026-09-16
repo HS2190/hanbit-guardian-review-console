@@ -5,22 +5,20 @@ html { background: #0A0B0D; }
 /* 토큰은 :root에 둔다 — 상단 내비는 .doc-world 바깥이라 여기 없으면
    아이리스의 라이트 라벨색(거의 검정)을 상속해 어두운 바 위에서 사라진다. */
 :root {
-  --paper: #07080A;
-  --paper-raised: #101215;
-  --panel: #171A1F;
-  --ink: #F5F6F7;
-  --ink-2: rgba(255,255,255,.64);
-  --ink-3: rgba(255,255,255,.54);
-  --rule: rgba(255,255,255,.12);
-  /* 색은 제품 화면만 낸다. 문서 세계는 무채색으로 비켜 준다. */
-  --accent: #E8E6E1;        /* 따뜻한 오프화이트 — 선·표시 */
-  --accent-solid: #EDEBE6;  /* 어두운 글자를 얹는 면 */
-  --on-solid: #0B0C0E;
+  --paper: #0A0B0D;
+  --paper-raised: #131519;
+  --panel: #1B1E24;
+  --ink: #F3F4F6;
+  --ink-2: rgba(255,255,255,.62);
+  --ink-3: rgba(255,255,255,.52);
+  --rule: rgba(255,255,255,.10);
+  --accent: #8B5CF6;        /* 선·작은 글자 — 어두운 바탕에서 읽히는 쪽 */
+  --accent-solid: #7C3AED;  /* 흰 글자를 얹는 면 — AA를 넘기는 쪽 */
   /* 히어로 그래픽 전용 — 톤을 갈아끼울 때 이 넷만 바꾸면 된다 */
-  --g-line: rgba(255,255,255,.26);
-  --g-dim: rgba(255,255,255,.08);
-  --g-accent: #E8E6E1;
-  --g-ink: #FFFFFF;
+  --g-line: rgba(255,255,255,.22);
+  --g-dim: rgba(255,255,255,.09);
+  --g-accent: #8B5CF6;
+  --g-ink: #F3F4F6;
   --display: 'Pretendard Variable', Pretendard, -apple-system, 'Noto Sans KR', sans-serif;
   /* 모션 토큰 — 진입은 한 벌, 미세 반응은 한 벌. 이 둘로만 움직인다. */
   --mo-dur: 560ms;
@@ -57,9 +55,7 @@ html { background: #0A0B0D; }
 .doc-world h2 { font-size: 29px; line-height: 1.32; letter-spacing: -.028em; margin: 0 0 18px; }
 .doc-world h3 { font-size: 18px; letter-spacing: -.02em; margin: 0 0 8px; }
 .doc-world p { line-height: 1.8; color: var(--ink-2); margin: 0 0 14px; letter-spacing: -.008em; }
-.doc-world a { color: var(--ink); text-underline-offset: 3px;
-  text-decoration-color: rgba(255,255,255,.38); text-decoration-thickness: 1px; }
-.doc-world a:hover { text-decoration-color: var(--ink); }
+.doc-world a { color: var(--accent); text-underline-offset: 3px; }
 .lead { font-size: 19px; color: var(--ink) !important; }
 
 /* 상단 내비 */
@@ -107,7 +103,7 @@ section.band:first-of-type { border-top: 0; padding-top: 52px; padding-bottom: 0
 .toc { position: sticky; top: 92px; align-self: start; display: grid; gap: 2px; }
 .toc a { display: block; padding: 7px 10px; font-size: 13px; color: var(--ink-2);
   text-decoration: none; border-left: 2px solid transparent; }
-.toc a.on { color: var(--ink); font-weight: 700; border-left-color: var(--accent); background: rgba(255,255,255,.07); }
+.toc a.on { color: var(--ink); font-weight: 700; border-left-color: var(--accent); background: rgba(139,92,246,.12); }
 .md { max-width: 820px; }
 .md h1 { font-size: 32px; letter-spacing: -.032em; margin: 0 0 18px; }
 .md h2 { font-size: 22px; letter-spacing: -.028em; margin: 38px 0 12px; padding-top: 18px; border-top: 1px solid var(--rule); }
@@ -124,7 +120,7 @@ section.band:first-of-type { border-top: 0; padding-top: 52px; padding-bottom: 0
 .md hr { border: 0; border-top: 1px solid var(--rule); margin: 28px 0; }
 
 /* 프로토타입 진입 */
-.cta { display: inline-flex; align-items: center; gap: 10px; background: var(--accent-solid); color: var(--on-solid);
+.cta { display: inline-flex; align-items: center; gap: 10px; background: var(--accent-solid); color: #fff;
   padding: 13px 22px; text-decoration: none; font-weight: 600; font-size: 14.5px; letter-spacing: -.01em;
   border-radius: 2px; transition: background .18s ease, transform .18s ease; }
 .cta.ghost { background: transparent; color: var(--ink); border: 1px solid var(--rule); }
@@ -177,7 +173,7 @@ footer.site { border-top: 1px solid var(--rule); padding: 40px 0 64px; font-size
 }
 
 /* .doc-world a 가 .cta 보다 우선해 글자가 배경색과 같아지던 것 수정 */
-.doc-world a.cta { color: var(--on-solid); text-decoration: none; }
+.doc-world a.cta { color: #fff; }
 .doc-world a.cta.ghost { color: var(--ink); }
 .doc-world a.cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
 .doc-world a.cta.ghost:hover { background: var(--panel); border-color: var(--ink-3); transform: translateY(-1px); }
