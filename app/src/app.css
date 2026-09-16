@@ -95,7 +95,10 @@ table.basis tr.emph td { background: var(--iris-semantic-background-status-info)
 
 .alert-wrap { margin: 12px 0; }
 .alert-wrap > * { width: 100%; }
-.policy > button, .panel > button { justify-self: start; }
+.policy > button { justify-self: start; }
+/* 판정 패널의 버튼은 입력 컨트롤과 같은 폭으로 — 세로로 훑을 때 모서리가 한 줄로 맞는다 */
+.panel > button { justify-self: stretch; width: 100%; }
+.panel [class*="iris-button-"] { width: 100%; }
 .row-actions button { flex: 0 0 auto; }
 
 /* 행 전체가 클릭 대상 */
