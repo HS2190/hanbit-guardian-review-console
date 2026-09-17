@@ -45,7 +45,7 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
           <div className="col-12 hero-txt">
             <div className="kick fu" style={{ animationDelay: '40ms' }}>프로덕트 디자이너 사전 과제 · 트랙 B · 2026.09.14 — 09.18</div>
             <h1 className="fu" style={{ animationDelay: '110ms' }}>
-              심사하는 동안 규칙이 바뀌어도<span className="sub">고객이 본 조건 그대로</span>
+              심사하는 동안 규칙이 바뀌어도<span className="h1-line2">고객이 본 조건 그대로</span>
             </h1>
             <p className="lede fu" style={{ animationDelay: '220ms' }}>
               제보를 받아 리워드를 주는 이벤트에서 정책은 도중에 바뀌고, 제출과 지급 사이에는 수일이 걸립니다.

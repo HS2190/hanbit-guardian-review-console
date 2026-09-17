@@ -2,27 +2,36 @@
    보라는 제품 안에만 둔다. 바깥 문서가 같은 보라를 쓰면 스크린샷이 페이지의 연장으로
    읽혀 경계가 사라진다. 그래서 문서 쪽 액센트는 저채도 녹색 한 가지로 고정한다. */
 /* 스크롤 바운스에서 어두운 띠가 보이지 않도록 캔버스도 같은 색으로 */
-html { background: #FBFBFA; }
+html { background: #F2EFE9; }
 
 /* 토큰은 :root에 둔다 — 상단 내비는 .doc-world 바깥이라 여기 없으면
    색을 상속하지 못해 바가 바탕에 녹는다. */
+/* 제출 덱과 같은 팔레트를 쓴다 — 웜 페이퍼 바탕에 번트 오렌지 하나.
+   덱에서 실측한 값: 바탕 F2EFE9 · 잉크 1C1A17 · 보조 5E574F/767065 ·
+   괘선 D6D0C6/EAE6DE · 액센트 D2521E. 그중 둘만 조정했고 이유는 대비다. */
 :root {
-  --paper: #FBFBFA;
+  --paper: #F2EFE9;
   --paper-raised: #FFFFFF;
-  --panel: #F3F3F1;
-  --ink: #17181A;
-  --ink-2: #55585E;
-  --ink-3: #6B6F77;        /* 밝은 바탕에서 AA(4.5:1)를 넘기는 가장 밝은 회색 */
-  --rule: #E7E7E5;          /* 안쪽 구분선 — 표·행 사이 */
-  --rule-2: #C9C9C6;        /* 구조선 — 섹션과 섹션을 가르는 쪽 */
-  --accent: #1C5D4B;        /* 선·작은 글자 */
-  --accent-solid: #1C5D4B;  /* 흰 글자를 얹는 면 — AA를 넘기는 쪽 */
-  --accent-wash: rgba(28,93,75,.10);
+  --panel: #EAE6DE;
+  --ink: #1C1A17;
+  --ink-2: #5E574F;
+  /* 덱의 767065 는 이 바탕에서 4.28:1 로 AA 에 못 미친다. 색조는 그대로 두고
+     명도만 내려 4.5 를 넘긴 값(5.04:1). 덱은 큰 글자에만 써서 문제가 없었다. */
+  --ink-3: #6B6559;
+  --rule: #E4DFD5;          /* 안쪽 구분선 — 표·행 사이 */
+  --rule-2: #D6D0C6;        /* 구조선 — 섹션과 섹션을 가르는 쪽 (덱 값) */
+  /* 액센트는 역할로 쪼갠다. 덱의 D2521E 는 글자로 쓰면 3.68:1, 흰 글자를 얹으면
+     4.23:1 이라 둘 다 AA 에 못 미친다. 그래서 면·선에는 덱 값을 그대로 쓰고,
+     글자가 걸리는 자리에만 같은 계열의 어두운 값을 쓴다. */
+  --accent: #D2521E;        /* 선·면·표식 — 글자를 얹지 않는 자리 (덱 값) */
+  --accent-ink: #B54417;    /* 링크·작은 액센트 글자 — 바탕 대비 4.81:1 */
+  --accent-solid: #B54417;  /* 흰 글자를 얹는 면 — 5.52:1 */
+  --accent-wash: rgba(210,82,30,.12);
   /* 히어로 그래픽 전용 — 톤을 갈아끼울 때 이 넷만 바꾸면 된다 */
-  --g-line: rgba(23,24,26,.28);
-  --g-dim: rgba(23,24,26,.07);
-  --g-accent: #1C5D4B;
-  --g-ink: #17181A;
+  --g-line: rgba(28,26,23,.30);
+  --g-dim: rgba(28,26,23,.08);
+  --g-accent: #B54417;
+  --g-ink: #1C1A17;
   --display: 'Pretendard Variable', Pretendard, -apple-system, 'Noto Sans KR', sans-serif;
   /* 모션 토큰 — 진입은 한 벌, 미세 반응은 한 벌. 이 둘로만 움직인다. */
   --mo-dur: 560ms;
@@ -59,7 +68,7 @@ html { background: #FBFBFA; }
 .doc-world h2 { font-size: 29px; line-height: 1.32; letter-spacing: -.028em; margin: 0 0 18px; }
 .doc-world h3 { font-size: 18px; letter-spacing: -.02em; margin: 0 0 8px; }
 .doc-world p { line-height: 1.8; color: var(--ink-2); margin: 0 0 14px; letter-spacing: -.008em; }
-.doc-world a { color: var(--accent); text-underline-offset: 3px; }
+.doc-world a { color: var(--accent-ink); text-underline-offset: 3px; }
 .lead { font-size: 19px; color: var(--ink) !important; }
 
 /* 상단 내비 */
@@ -259,13 +268,15 @@ footer.site { border-top: 1px solid var(--rule); padding: 40px 0 64px; font-size
 .hero-band { padding-bottom: 0 !important; }
 .hero-band .grid { align-items: center; min-height: 0; }
 .col-6 { grid-column: span 6; }
-.hero-txt { padding: 88px 0 56px; }
+.hero-txt { padding: 40px 0 56px; }
 /* 인쇄판의 머리 — 라벨 뒤로 괘선이 단 끝까지 흐른다 */
 .kick { display: flex; align-items: center; gap: 14px; font-size: 11px; letter-spacing: .18em;
   color: var(--ink-3); font-weight: 600; }
 .kick::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
-/* 제목 둘째 줄은 크기가 아니라 무게로 내려간다 */
-.hero-txt h1 .sub { display: block; font-weight: 400; color: var(--ink-2); }
+/* 제목 둘째 줄은 크기가 아니라 무게로 내려간다.
+   클래스 이름을 .sub 로 두면 안 된다 — app.css 의 전역 .sub(13px)와 부딪혀
+   제목이 캡션 크기로 줄어든다. 두 스타일시트가 같은 전역 공간을 쓴다. */
+.hero-txt h1 .h1-line2 { display: block; font-weight: 400; color: var(--ink-2); font-size: inherit; }
 /* 컨테이너는 1240에서 멈추는데 vw는 계속 커진다 — 상한을 열 폭에 맞춰 잡는다.
    넓은 화면에서 제목이 세 줄로 깨지던 것. */
 .doc-world .hero-txt h1 { margin: 34px 0 0; font-size: clamp(30px, 3.4vw, 47px);
@@ -354,7 +365,7 @@ footer.site { border-top: 1px solid var(--rule); padding: 40px 0 64px; font-size
 @media (max-width: 1080px) {
   .col-6 { grid-column: 1 / -1; }
   .hero-band .grid { min-height: 0; }
-  .hero-txt { padding: 64px 0 40px; }
+  .hero-txt { padding: 28px 0 40px; }
   .metrics .grid { grid-template-columns: 1fr 1fr; }
   .metric + .metric { border-left: 0; padding-left: 0; }
   .metric:nth-child(n+3) { border-top: 1px solid var(--rule); }
@@ -386,7 +397,7 @@ footer.site { border-top: 1px solid var(--rule); padding: 40px 0 64px; font-size
   --ink-2: rgba(255,255,255,.66);
   --ink-3: rgba(255,255,255,.52);
   --rule: rgba(255,255,255,.14);
-  --accent: #7FD1B4;
+  --accent: #E8814F;        /* 어두운 오버레이 위에서 읽히는 번트 오렌지 */
   font-family: var(--display); color: var(--ink); color-scheme: dark;
   backdrop-filter: blur(18px) saturate(.9); -webkit-backdrop-filter: blur(18px) saturate(.9);
   animation: lb-in 200ms ease-out both; }
