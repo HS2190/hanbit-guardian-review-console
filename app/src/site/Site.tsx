@@ -42,9 +42,11 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
     <>
       <section className="band hero-band">
         <div className="grid">
-          <div className="col-7 hero-txt">
+          <div className="col-12 hero-txt">
             <div className="kick fu" style={{ animationDelay: '40ms' }}>프로덕트 디자이너 사전 과제 · 트랙 B · 2026.09.14 — 09.18</div>
-            <h1 className="fu" style={{ animationDelay: '110ms' }}>심사하는 동안 규칙이 바뀌어도,<br />고객이 본 조건 그대로</h1>
+            <h1 className="fu" style={{ animationDelay: '110ms' }}>
+              심사하는 동안 규칙이 바뀌어도<span className="sub">고객이 본 조건 그대로</span>
+            </h1>
             <p className="lede fu" style={{ animationDelay: '220ms' }}>
               제보를 받아 리워드를 주는 이벤트에서 정책은 도중에 바뀌고, 제출과 지급 사이에는 수일이 걸립니다.
               그 사이를 고객이 부담하지 않도록 관리자 백오피스를 다시 설계했습니다.
@@ -54,9 +56,17 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
               <a className="cta ghost" href="#/screens" onClick={(e) => { e.preventDefault(); go('screens'); }}>화면 보기</a>
             </div>
           </div>
-          <div className="col-5 hero-graphic"><HeroTimeline /></div>
         </div>
       </section>
+
+      <div className="diagram-band">
+        <Reveal className="grid">
+          <div className="col-12 diagram">
+            <span className="label">그림 한 장</span>
+            <HeroTimeline />
+          </div>
+        </Reveal>
+      </div>
 
       <div className="metrics">
         <Reveal className="grid">
@@ -69,12 +79,15 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
 
       <section className="band">
         <div className="grid">
-          <Reveal className="col-12 move">
+          <Reveal className="col-12 move gutter">
             <span className="label">한 수</span>
-            <q>적용 정책은 <em>접수 시각의 발효 버전</em>으로 정해지고, 심사자는 그것을 선택할 수 없다.</q>
-            <p>심사자에게 재량을 더 주는 대신 선택지를 없앴습니다. 오류의 원인이 부주의가 아니라 선택지의 존재라고 봤기 때문입니다.</p>
+            <div>
+              <q>적용 정책은 <em>접수 시각의 발효 버전</em>으로 정해지고, 심사자는 그것을 선택할 수 없다.</q>
+              <p>심사자에게 재량을 더 주는 대신 선택지를 없앴습니다. 오류의 원인이 부주의가 아니라 선택지의 존재라고 봤기 때문입니다.</p>
+            </div>
           </Reveal>
-          <Reveal className="col-12" stagger={false}>
+          <Reveal className="col-12 gutter shot-gap" stagger={false}>
+            <span className="label">화면</span>
             <figure className="bigshot">
               <img src={`${import.meta.env.BASE_URL}screens/02-detail.webp`} alt="심사 상세 — 적용 정책이 첫 시선에 닿는 배치" />
               <figcaption><b>심사 상세</b>첫 시선이 금액이 아니라 "어느 시점 기준인가"에 닿는다. #1042는 9/15 09:47 접수라 v1의 30,000원으로 잠겨 있고, 36분 뒤 발효한 v2는 이 건을 바꾸지 못한다.</figcaption>
