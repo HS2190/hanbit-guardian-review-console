@@ -92,9 +92,19 @@ main { padding: var(--iris-space-24); }
 .hist-values dt { color: var(--iris-semantic-label-alternative); font-size: var(--iris-font-size-label-2); }
 .hist-values dd { margin: 0; font-size: var(--iris-font-size-label-2); }
 
+/* 미지원 폭 안내 — 1280 이상에서는 존재하지 않는다 */
+.narrow-note { display: none; }
 @media (max-width: 1279px) {
   .policy-two { grid-template-columns: minmax(0, 1fr); }
   .policy-history { position: static; }
+  .narrow-note {
+    display: block; margin: 0;
+    padding: var(--iris-space-8) var(--iris-space-24);
+    background: var(--iris-semantic-background-status-cautionary);
+    border-bottom: 1px solid var(--iris-semantic-line-status-cautionary);
+    color: var(--iris-semantic-label-normal);
+    font-size: var(--iris-font-size-label-2);
+  }
 }
 .card > [class*="iris-body-"] { display: grid; gap: var(--iris-space-12); }
 .impact { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--iris-space-12); }

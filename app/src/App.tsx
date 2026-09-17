@@ -61,6 +61,10 @@ function Console() {
         <span className="ctx">성수점 · 2026 가을 매장 지킴이</span>
       </div>
 
+      {/* 열두 열짜리 표는 1280 미만에서 컨테이너 밖으로 넘친다. 조용히 넘치게 두지 않고
+          지금 무슨 일이 일어나는지 말한다 — 폭이 넓어지면 CSS가 알아서 걷어낸다. */}
+      <p className="narrow-note" role="status">1280px 이상 화면 전용 — 현재 폭에서는 가로 스크롤</p>
+
       <main>
         {tab === '심사 큐' ? (
           <Queue>
