@@ -8,7 +8,7 @@
 
 | | |
 |---|---|
-| ![심사 큐](assets/screens/01-queue.png) | ![심사 상세](assets/screens/02-detail.png) |
+| ![심사 큐](assets/screens/01-queue.webp) | ![심사 상세](assets/screens/02-detail.webp) |
 | 심사 큐 — 선택 전에는 열두 열을 전체 폭으로 | 심사 상세 — 목록이 레일로 접히고 근거부터 |
 
 ## 문제
@@ -34,7 +34,7 @@
 
 | | | |
 |---|---|---|
-| ![차단](assets/screens/04-blocked.png) | ![중복 · 0원](assets/screens/06-dup-zero.png) | ![영향 확인](assets/screens/08-impact.png) |
+| ![차단](assets/screens/04-blocked.webp) | ![중복 · 0원](assets/screens/06-dup-zero.webp) | ![영향 확인](assets/screens/08-impact.webp) |
 | 확정 차단 — 이유와 다음 행동을 함께 | 중복 · 0원 — 결과와 지급은 다른 축 | 영향 확인 — 발행 전 마지막 게이트 |
 
 이 외에 확정 가능 상태, 완료, 정책 현황, 빈 상태가 [assets/screens](assets/screens)에 있습니다. 모두 배포된 프로토타입에서 그대로 찍은 것입니다.
@@ -60,7 +60,7 @@
 
 검수와 교차검증에는 직접 구축한 멀티에이전트 체계를 사용했습니다. 무엇을 만들지, 지적을 받아들일지, 어떻게 고칠지는 제가 정했습니다. 자세한 내용은 [검수 기록](docs/06-review.md)에 있습니다.
 
-디자인 시스템은 개인 프로젝트인 Iris를 라이브러리로 연결해 썼습니다. 이 과제 파일에는 자체 토큰을 두지 않았고, 사용한 변수 96개와 컴포넌트 25종을 Figma 안에 정리해 두었습니다.
+디자인 시스템은 개인 프로젝트인 Iris를 라이브러리로 연결해 썼습니다. 이 과제 파일에는 자체 토큰이 없습니다(로컬 변수 0개). 화면이 쓰는 컴포넌트 16종과 참조하는 변수 44개를 Figma 03·04 페이지에 정리해 두었습니다.
 
 ## 한계
 
