@@ -110,7 +110,7 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
             <h2>말보다 눌러 보는 쪽이 빠릅니다</h2>
           </Reveal>
           <Reveal className="col-7" delay={80}>
-            <p>규칙이 실제로 계산됩니다. 목 데이터로 브라우저 안에서만 돌고, 새로고침하면 처음 상태로 돌아갑니다.</p>
+            <p>규칙이 실제로 돌아 금액을 계산합니다. 목 데이터로 브라우저 안에서만 돌고, 새로고침하면 처음 상태로 돌아갑니다.</p>
             <div className="try-cards stg">
               <div className="mini"><b>접수 시각이 기준이라는 것</b><span>#1042는 9/15 09:47 접수라 v1의 30,000원이 적용된다. 36분 뒤 v2가 발효했지만 이 건은 바뀌지 않는다.</span></div>
               <div className="mini"><b>선행 건이 막는다는 것</b><span>#1063은 같은 고객의 #1042가 미판정이라 확정이 막혀 있다. #1042를 확정하면 잔여 한도로 열린다.</span></div>
@@ -127,7 +127,7 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
             <dl className="limits">
               <div><dt>사용자 검증 0회</dt><dd>적용 정책을 고를 수 없게 만든 것이 심사자에게 방해가 아니라 안심으로 느껴지는지가 첫 검증 항목이다.</dd></div>
               <div><dt>보완 1회 · 기한 7일은 가설</dt><dd>운영 데이터로 정할 값이다.</dd></div>
-              <div><dt>동시 편집 잠금 없음</dt><dd>먼저 확정한 쪽이 이기고 뒤늦은 저장은 실패 안내를 받는다.</dd></div>
+              <div><dt>동시 편집 잠금 없음</dt><dd>먼저 확정한 내용이 저장된다. 뒤늦게 저장한 심사자에게는 실패를 알린다.</dd></div>
             </dl>
             <p className="tail">과정과 근거는 <a href="#/docs" onClick={(e) => { e.preventDefault(); go('docs'); }}>문서 여섯 편</a>에 정리했습니다. 작업 원문은 부록으로 접어 두었습니다.</p>
           </Reveal>
