@@ -64,7 +64,31 @@ main { padding: var(--iris-space-24); }
 
 
 
-.policy { max-width: 820px; display: grid; gap: var(--iris-space-16); }
+/* 정책은 좌우 두 단이다 — 값 표는 2열이라 넓힐 이유가 없고,
+   비어 있던 오른쪽에 발행 이력이 모든 단계에서 머문다. */
+.policy-layout { display: grid; grid-template-columns: minmax(0, 820px) 360px;
+  gap: var(--iris-space-16); align-items: start; }
+.policy { display: grid; gap: var(--iris-space-16); align-content: start; }
+
+.policy-history { position: sticky; top: 0; display: grid; gap: var(--iris-space-8);
+  background: var(--iris-semantic-background-normal-normal);
+  border: 1px solid var(--iris-semantic-line-normal-normal);
+  border-radius: var(--iris-radius-md); padding: var(--iris-space-16); }
+.hist-head { display: grid; grid-template-columns: auto 1fr auto; align-items: center;
+  gap: var(--iris-space-8); width: 100%; }
+.hist-head em { font-style: normal; font-size: var(--iris-font-size-caption-1);
+  color: var(--iris-semantic-label-alternative); }
+.hist-state { font-size: var(--iris-font-size-caption-1); color: var(--iris-semantic-label-alternative); }
+.hist-state.on { color: var(--iris-semantic-primary-normal); font-weight: 700; }
+.hist-values { margin: 0; display: grid; gap: var(--iris-space-6); }
+.hist-values > div { display: flex; justify-content: space-between; gap: var(--iris-space-12); }
+.hist-values dt { color: var(--iris-semantic-label-alternative); font-size: var(--iris-font-size-label-2); }
+.hist-values dd { margin: 0; font-size: var(--iris-font-size-label-2); }
+
+@media (max-width: 1279px) {
+  .policy-layout { grid-template-columns: minmax(0, 1fr); }
+  .policy-history { position: static; }
+}
 .card > [class*="iris-body-"] { display: grid; gap: var(--iris-space-12); }
 .impact { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--iris-space-12); }
 .impact > * > [class*="iris-body-"] { display: grid; gap: var(--iris-space-2); }
