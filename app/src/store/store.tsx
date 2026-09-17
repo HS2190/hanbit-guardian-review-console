@@ -10,7 +10,9 @@ export interface State {
   selected: string | null;
   filter: string | null;
   query: string;
-  toast: { text: string; link?: string } | null;
+  toast: { text: string } | null;
+  /** 확정의 하류 효과로 방금 상태가 바뀐 건 — 레일에서 한 번 깜빡인다 */
+  flash: string | null;
   draft: Policy | null;
   step: '현황' | '편집' | '영향 확인' | '완료';
   now: string;
@@ -26,7 +28,8 @@ type Action =
   | { t: 'supplement'; id: string; reason: string }
   | { t: 'duplicate'; id: string; originId: string; reason: string }
   | { t: 'confirm'; id: string }
-  | { t: 'toast'; text: string | null; link?: string }
+  | { t: 'toast'; text: string | null }
+  | { t: 'flash'; id: string | null }
   | { t: 'draft'; patch: Partial<Policy> }
   | { t: 'step'; v: State['step'] }
   | { t: 'publish' }
@@ -46,7 +49,7 @@ const STEP = (['현황', '편집', '영향 확인', '완료'] as const)
 
 export const initial: State = {
   reports: seedReports, policies: seedPolicies, selected: q ? `#${q.replace('#', '')}` : null,
-  filter: null, query: param('q') ?? '', toast: null,
+  filter: null, query: param('q') ?? '', toast: null, flash: null,
   draft: STEP === '현황' ? null : { ...seedPolicies.find((p) => p.status === '발효')!, version: 'v3', status: '초안',
     amounts: { ...seedPolicies.find((p) => p.status === '발효')!.amounts, '유통기한 경과': 5000 } },
   step: STEP, now: NOW,
@@ -85,11 +88,12 @@ export function reducer(s: State, a: Action): State {
           ? next.map((x) => (x.id === sibling.id ? { ...x, process: '심사 중' as const } : x))
           : next,
         toast: sibling
-          ? { text: `확정됨 · 같은 고객 ${sibling.id} 재검토로 전환`, link: sibling.id }
+          ? { text: `확정됨 · 같은 고객 ${sibling.id} 재검토로 전환` }
           : { text: `확정됨 · ${j.amount.toLocaleString('ko-KR')}원` },
+        flash: sibling ? sibling.id : null,
       };
     }
-    case 'toast': return { ...s, toast: a.text ? { text: a.text, link: a.link } : null };
+    case 'toast': return { ...s, toast: a.text ? { text: a.text } : null };
     case 'draft': {
       const base = s.draft ?? { ...s.policies.find((p) => p.status === '발효')!, version: 'v3', status: '초안' as const };
       return { ...s, draft: { ...base, ...a.patch } };
@@ -106,6 +110,7 @@ export function reducer(s: State, a: Action): State {
         draft: null, step: '완료', toast: { text: `발행됨 · ${published.version} 즉시 발효` },
       };
     }
+    case 'flash': return { ...s, flash: a.id };
     case 'reset': return initial;
     default: return s;
   }

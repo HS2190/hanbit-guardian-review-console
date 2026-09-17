@@ -42,6 +42,13 @@ function Console() {
     return () => clearTimeout(id);
   }, [toastText, d]);
 
+  // 깜빡임은 600ms 한 번. 상태를 비워야 같은 행이 또 바뀔 때 다시 실행된다
+  useEffect(() => {
+    if (!s.flash) return;
+    const id = setTimeout(() => d({ t: 'flash', id: null }), 600);
+    return () => clearTimeout(id);
+  }, [s.flash, d]);
+
   return (
     <div className="shell">
       <TopNavigation

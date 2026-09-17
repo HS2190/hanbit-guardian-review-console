@@ -63,7 +63,8 @@ export function Queue({ children }: { children: React.ReactNode }) {
             </div>
             {rows.map((r) => (
               <ListCell key={r.id} interactive
-                className={r.id === selected ? 'on' : undefined}
+                className={[r.id === selected && 'on', r.id === s.flash && 'flash']
+                  .filter(Boolean).join(' ') || undefined}
                 onClick={() => d({ t: 'select', id: r.id })}
                 title={r.id}
                 description={fmt(r.submittedAt)}

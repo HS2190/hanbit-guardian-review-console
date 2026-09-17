@@ -161,6 +161,24 @@ main { padding: var(--iris-space-24); }
 
 .queue-rail .on { background: var(--iris-semantic-background-status-info); }
 
+/* 확정이 같은 고객의 선행 판정 대기 건을 풀면 그 행이 한 번 깜빡인다.
+   토스트가 문장으로 알리는 변화를 레일에서도 짚어 준다 — 누를 필요는 없다. */
+.queue-rail .flash { position: relative; animation: rail-flash 600ms ease-out 1; }
+.queue-rail .flash::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--iris-semantic-primary-normal);
+  animation: rail-flash-bar 600ms ease-out 1;
+}
+@keyframes rail-flash {
+  from { background: var(--iris-semantic-background-status-info); }
+  to   { background: transparent; }
+}
+@keyframes rail-flash-bar { from { opacity: 1; } to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .queue-rail .flash, .queue-rail .flash::before { animation: none; }
+  .queue-rail .flash::before { display: none; }
+}
+
 
 
 
