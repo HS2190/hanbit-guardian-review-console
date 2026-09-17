@@ -133,6 +133,15 @@ describe('정책 변경의 영향 — 발행 전 게이트', () => {
     expect(impact(reports, after, draft, NOW).changedFields).toEqual([]);
   });
 
+  // 한 세션에서 두 번 발행하면 두 버전의 발효 시각이 s.now로 같아진다.
+  it('발효 시각이 같으면 나중에 발행한 버전이 현재 정책이다', () => {
+    const base = policies.find((p) => p.status === '발효')!;
+    const v3: Policy = { ...base, version: 'v3', status: '종료', effectiveFrom: NOW, publishedAt: NOW };
+    const v4: Policy = { ...base, version: 'v4', status: '발효', effectiveFrom: NOW, publishedAt: NOW };
+    const after = [...policies.map((p) => ({ ...p, status: '종료' as const })), v3, v4];
+    expect(currentPolicy(after, NOW).version).toBe('v4');
+  });
+
   it('초안 버전은 이력 끝에서 이어진다', () => {
     expect(nextVersion(policies)).toBe('v3');
     expect(nextVersion([...policies, { ...policies[1], version: 'v3' }])).toBe('v4');

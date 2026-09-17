@@ -3,12 +3,16 @@ import type { Policy, Report } from './types';
 /** 접수 시각에 발효 중이던 버전. 이 함수가 이 제품의 단일 원칙이다. */
 export function appliedPolicy(policies: Policy[], submittedAt: string): Policy {
   const t = Date.parse(submittedAt);
+  // 발효 시각이 같으면 나중에 발행한 쪽이 이긴다. 한 번의 심사 세션에서 두 번
+  // 발행하면 두 버전의 발효 시각이 같아지는데, 타이브레이커가 없으면 먼저 발행한
+  // 버전이 "현재 정책"으로 남아 발행 완료 화면이 방금 만든 버전을 부르지 못한다.
   const candidates = policies
-    .filter((p) => p.status === '발효' || p.status === '종료')
-    .filter((p) => Date.parse(p.effectiveFrom) <= t)
-    .sort((a, b) => Date.parse(b.effectiveFrom) - Date.parse(a.effectiveFrom));
+    .map((p, i) => ({ p, i }))
+    .filter(({ p }) => p.status === '발효' || p.status === '종료')
+    .filter(({ p }) => Date.parse(p.effectiveFrom) <= t)
+    .sort((a, b) => Date.parse(b.p.effectiveFrom) - Date.parse(a.p.effectiveFrom) || b.i - a.i);
   if (!candidates.length) throw new Error('접수 시각 이전에 발효된 정책이 없습니다');
-  return candidates[0];
+  return candidates[0].p;
 }
 
 /** 지금 발효 중인 버전. 비교용으로만 쓰고 심사에 쓰지 않는다. */
