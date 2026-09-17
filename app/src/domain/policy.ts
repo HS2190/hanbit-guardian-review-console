@@ -20,11 +20,19 @@ export function policyDiffers(applied: Policy, current: Policy): boolean {
   return applied.version !== current.version;
 }
 
+/** 다음 초안의 버전. 발행이 반복돼도 번호가 겹치지 않아야 이력이 읽힌다. */
+export function nextVersion(policies: Policy[]): string {
+  const max = policies.reduce((m, p) => Math.max(m, Number(p.version.replace(/\D/g, '')) || 0), 0);
+  return `v${max + 1}`;
+}
+
 /** 정책 변경이 이미 접수된 건에 미치는 영향 — 발행 전 게이트에서 쓴다. */
-export function impact(reports: Report[], policies: Policy[], draft: Policy) {
+export function impact(reports: Report[], policies: Policy[], draft: Policy, now: string) {
   const open = reports.filter((r) => r.process !== '심사 완료');
   const changed: string[] = [];
-  const base = currentPolicy(policies);
+  // 기준은 호출 시각이 아니라 앱의 현재 시각이다. 벽시계를 쓰면 방금 발행한 버전이
+  // "아직 발효 전"으로 빠져 비교 대상이 한 버전 밀리고, 「변경된 항목 없음」이 뚫린다.
+  const base = currentPolicy(policies, now);
   (Object.keys(draft.amounts) as (keyof typeof draft.amounts)[]).forEach((k) => {
     if (draft.amounts[k] !== base.amounts[k]) changed.push(k);
   });

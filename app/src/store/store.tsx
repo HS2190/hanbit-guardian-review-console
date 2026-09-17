@@ -3,6 +3,7 @@ import type { DefectType, Policy, Report } from '../domain/types';
 import { policies as seedPolicies, reports as seedReports, NOW } from '../data/seed';
 import { confirm, markDuplicate, reclassify, requestSupplement, setEvidence, start } from '../domain/apply';
 import { judge } from '../domain/rules';
+import { nextVersion } from '../domain/policy';
 
 export interface State {
   reports: Report[];
@@ -95,7 +96,11 @@ export function reducer(s: State, a: Action): State {
     }
     case 'toast': return { ...s, toast: a.text ? { text: a.text } : null };
     case 'draft': {
-      const base = s.draft ?? { ...s.policies.find((p) => p.status === '발효')!, version: 'v3', status: '초안' as const };
+      // 초안의 바탕은 "지금 발효 중인" 버전이고, 번호는 이력 끝에서 이어 붙인다.
+      const base = s.draft ?? {
+        ...s.policies.find((p) => p.status === '발효')!,
+        version: nextVersion(s.policies), status: '초안' as const,
+      };
       return { ...s, draft: { ...base, ...a.patch } };
     }
     case 'step': return { ...s, step: a.v };

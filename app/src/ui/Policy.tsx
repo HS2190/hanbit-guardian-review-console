@@ -120,7 +120,7 @@ export function Policy() {
     );
 
     if (s.step === '영향 확인' && draft) {
-      const i = impact(s.reports, s.policies, draft);
+      const i = impact(s.reports, s.policies, draft, s.now);
       const noChange = i.changedFields.length === 0;
       return (
         <>

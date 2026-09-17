@@ -21,6 +21,13 @@ export function Detail({ r, onConfirm, onSupplement }: {
   const cands = duplicateCandidates(r, s.reports);
   const basis = applied.amounts[r.defectType];
 
+  // 금액은 확정돼야 보이는 것이 아니라, 정해졌으면 보인다.
+  // 확정 전에 숨기면 한도로 깎이는 바로 그 순간에 산식이 비어, 심사자가 버튼의 숫자를 검산할 수 없다.
+  const settled = done ? (r.payout.amount ?? 0) : (j.step === 5 && !j.blocked ? j.amount : null);
+  // 「한도 조정」은 ⑤단계까지 간 유효 건에서만 뜻이 있다 — 증빙 불충분 0원은 한도로 깎인 것이 아니다.
+  const capCut = settled !== null && j.step === 5 && j.outcome === '유효·최초' && settled < basis
+    ? basis - settled : 0;
+
   // 상단 정보가 고정이라, 판정 카드가 그 아래에 붙으려면 높이를 알아야 한다
   const headRef = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -69,8 +76,10 @@ export function Detail({ r, onConfirm, onSupplement }: {
         </div>
         <div>
           <div className="overline">산정</div>
-          <div className="amount-sm">{done ? `${won(r.payout.amount ?? 0)}원` : '미확정'}</div>
-          <div className="sub">기준액 {won(basis)} → 한도 조정 → 최종 {done ? won(r.payout.amount ?? 0) : '—'}</div>
+          <div className="amount-sm">{settled === null ? '미확정' : `${won(settled)}원`}</div>
+          <div className="sub">
+            기준액 {won(basis)} → 한도 조정 {capCut ? `−${won(capCut)}` : ''} → 최종 {settled === null ? '—' : won(settled)}
+          </div>
         </div>
         <div>
           <div className="overline">다음 행동</div>

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { policies, reports } from '../data/seed';
-import { appliedPolicy, currentPolicy, impact } from './policy';
+import type { Policy } from './types';
+import { appliedPolicy, currentPolicy, impact, nextVersion } from './policy';
 import { blockingPredecessor, duplicateCandidates, judge } from './rules';
 import { confirm, setEvidence } from './apply';
 
@@ -106,9 +107,34 @@ describe('유효 · 0원은 반려가 아니다', () => {
 describe('정책 변경의 영향 — 발행 전 게이트', () => {
   it('이미 확정된 금액은 영향 범위에 들어가지 않는다', () => {
     const draft = { ...policies[1], version: 'v3', amounts: { ...policies[1].amounts, '유통기한 경과': 5000 } };
-    const i = impact(reports, policies, draft);
+    const i = impact(reports, policies, draft, NOW);
     expect(i.changedFields).toEqual(['유통기한 경과']);
     expect(i.affected.count).toBeGreaterThan(0);
     expect(i.paid.amount).toBe(60000);                   // #1003 + #1015
+  });
+
+  it('값이 그대로면 변경 항목이 없다 — 발행을 막는 근거', () => {
+    const current = policies.find((p) => p.status === '발효')!;
+    const draft = { ...current, version: 'v3' };
+    expect(impact(reports, policies, draft, NOW).changedFields).toEqual([]);
+  });
+
+  // 발행 직후 기준이 한 버전 밀리면 「변경된 항목 없음」이 뚫린다.
+  // 벽시계가 아니라 앱의 현재 시각으로 비교해야 갓 발행된 버전이 기준이 된다.
+  it('방금 발행해 발효 시각이 미래인 버전도 비교 기준이 된다', () => {
+    const v3: Policy = {
+      ...policies.find((p) => p.status === '발효')!,
+      version: 'v3', status: '발효',
+      effectiveFrom: NOW, publishedAt: NOW,
+      amounts: { ...policies[1].amounts, '유통기한 경과': 5000 },
+    };
+    const after = [...policies.map((p) => ({ ...p, status: '종료' as const })), v3];
+    const draft = { ...v3, version: 'v4', status: '초안' as const };
+    expect(impact(reports, after, draft, NOW).changedFields).toEqual([]);
+  });
+
+  it('초안 버전은 이력 끝에서 이어진다', () => {
+    expect(nextVersion(policies)).toBe('v3');
+    expect(nextVersion([...policies, { ...policies[1], version: 'v3' }])).toBe('v4');
   });
 });
