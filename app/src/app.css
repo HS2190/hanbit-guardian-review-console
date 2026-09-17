@@ -64,9 +64,16 @@ main { padding: var(--iris-space-24); }
 
 
 
-/* 정책은 좌우 두 단이다 — 값 표는 2열이라 넓힐 이유가 없고,
-   비어 있던 오른쪽에 발행 이력이 모든 단계에서 머문다. */
-.policy-layout { display: grid; grid-template-columns: minmax(0, 820px) 360px;
+/* 정책은 머리를 전체 폭으로 두고 그 아래를 좌우로 나눈다.
+   머리가 한쪽 단에만 있으면 반대쪽 패널이 그만큼 위로 떠서 시작선이 어긋난다.
+   뼈대는 심사 큐와 같다 — 좌측은 남는 폭을 쓰고 우측 사이드는 화면 끝에 붙는다. */
+.policy-page { display: grid; gap: var(--iris-space-16); }
+.policy-head { display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--iris-space-16); padding-bottom: var(--iris-space-16);
+  border-bottom: 1px solid var(--iris-semantic-line-normal-normal); }
+.policy-head h1 { margin: 0; }
+.policy-head .overline { margin: var(--iris-space-6) 0 0; }
+.policy-two { display: grid; grid-template-columns: minmax(0, 1fr) 340px;
   gap: var(--iris-space-16); align-items: start; }
 .policy { display: grid; gap: var(--iris-space-16); align-content: start; }
 
@@ -86,7 +93,7 @@ main { padding: var(--iris-space-24); }
 .hist-values dd { margin: 0; font-size: var(--iris-font-size-label-2); }
 
 @media (max-width: 1279px) {
-  .policy-layout { grid-template-columns: minmax(0, 1fr); }
+  .policy-two { grid-template-columns: minmax(0, 1fr); }
   .policy-history { position: static; }
 }
 .card > [class*="iris-body-"] { display: grid; gap: var(--iris-space-12); }

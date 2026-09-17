@@ -63,12 +63,25 @@ export function Policy() {
   const current = currentPolicy(s.policies, s.now);
   const draft = s.draft;
 
+  const head = (() => {
+    if (s.step === '현황') return {
+      title: '정책',
+      sub: `발효 중 · ${current.version} (${fmt(current.effectiveFrom)}~)`,
+      action: (
+        <Button size="l" onClick={() => { d({ t: 'draft', patch: {} }); d({ t: 'step', v: '편집' }); }}>
+          새 버전 초안 만들기
+        </Button>
+      ),
+    };
+    if (s.step === '편집' && draft) return { title: `정책 편집 · ${draft.version} 초안`, sub: null, action: null };
+    if (s.step === '영향 확인' && draft) return { title: `영향 확인 · ${draft.version}`, sub: null, action: null };
+    return { title: '발행 완료', sub: null, action: null };
+  })();
+
   const body = (() => {
     if (s.step === '현황') return (
       <>
-        <h1>정책</h1>
         <Card variant="outlined" className="card">
-          <div className="overline">발효 중 · {current.version} ({fmt(current.effectiveFrom)}~)</div>
           <Table
             columns={[{ key: 'k', header: '항목' }, { key: 'v', header: '값' }]}
             data={[
@@ -77,15 +90,11 @@ export function Policy() {
               { k: '1인 한도', v: won(current.perPersonCap) },
             ]} />
         </Card>
-        <Button size="l" onClick={() => { d({ t: 'draft', patch: {} }); d({ t: 'step', v: '편집' }); }}>
-          새 버전 초안 만들기
-        </Button>
       </>
     );
 
     if (s.step === '편집' && draft) return (
       <>
-        <h1>정책 편집 · {draft.version} 초안</h1>
         <Card variant="outlined" className="card">
           {DEFECTS.map((k) => (
             <TextField key={k} label={k} value={String(draft.amounts[k])}
@@ -111,7 +120,6 @@ export function Policy() {
       const noChange = i.changedFields.length === 0;
       return (
         <>
-          <h1>영향 확인 · {draft.version}</h1>
           <div className="impact">
             <Card variant="outlined"><span className="overline">① 지급 완료</span><b>{won(i.paid.amount)}</b><span>{i.paid.count}건</span></Card>
             <Card variant="outlined"><span className="overline">② 지급 확정 · 미송금</span><b>{won(i.confirmed.amount)}</b><span>{i.confirmed.count}건</span></Card>
@@ -136,7 +144,6 @@ export function Policy() {
 
     return (
       <>
-        <h1>발행 완료</h1>
         <SectionMessage tone="positive" title={`${currentPolicy(s.policies, s.now).version} 발효 중`}>
           새 값은 발효 이후 접수분부터 적용됩니다. 이미 접수된 건의 적용 조건은 바뀌지 않았습니다.
         </SectionMessage>
@@ -146,9 +153,18 @@ export function Policy() {
   })();
 
   return (
-    <div className="policy-layout">
-      <div className="policy">{body}</div>
-      <PolicyHistory />
+    <div className="policy-page">
+      <header className="policy-head">
+        <div>
+          <h1>{head.title}</h1>
+          {head.sub && <p className="overline">{head.sub}</p>}
+        </div>
+        {head.action}
+      </header>
+      <div className="policy-two">
+        <div className="policy">{body}</div>
+        <PolicyHistory />
+      </div>
     </div>
   );
 }
