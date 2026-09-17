@@ -266,9 +266,9 @@ footer.site { border-top: 1px solid var(--rule); padding: 40px 0 64px; font-size
    제품 화면은 본문에서 전폭으로 나온다. 히어로는 같은 일을 또 하지 않고
    주장을 한 장으로 그린다. */
 .hero-band { padding-bottom: 0 !important; }
-.hero-band .grid { align-items: center; min-height: 0; }
+.hero-band .grid { align-items: center; min-height: 560px; }
 .col-6 { grid-column: span 6; }
-.hero-txt { padding: 40px 0 56px; }
+.hero-txt { padding: 72px 0; }
 /* 인쇄판의 머리 — 라벨 뒤로 괘선이 단 끝까지 흐른다 */
 .kick { display: flex; align-items: center; gap: 14px; font-size: 11px; letter-spacing: .18em;
   color: var(--ink-3); font-weight: 600; }
@@ -279,16 +279,13 @@ footer.site { border-top: 1px solid var(--rule); padding: 40px 0 64px; font-size
 .hero-txt h1 .h1-line2 { display: block; font-weight: 400; color: var(--ink-2); font-size: inherit; }
 /* 컨테이너는 1240에서 멈추는데 vw는 계속 커진다 — 상한을 열 폭에 맞춰 잡는다.
    넓은 화면에서 제목이 세 줄로 깨지던 것. */
-.doc-world .hero-txt h1 { margin: 34px 0 0; font-size: clamp(30px, 3.4vw, 47px);
-  line-height: 1.24; letter-spacing: -.03em; max-width: 19ch; }
-.hero-txt .lede { margin: 24px 0 0; max-width: 52ch; color: var(--ink-2) !important; font-size: 16px; }
+/* ch 는 '0' 글리프 폭이라 한글에는 상한으로 쓸 수 없다 — 17ch 를 걸었더니
+   들어갈 자리가 있는데도 제목이 세 줄로 접혔다. 열 폭이 이미 상한이다. */
+.doc-world .hero-txt h1 { margin: 28px 0 0; font-size: clamp(30px, 3.1vw, 43px);
+  line-height: 1.24; letter-spacing: -.03em; max-width: none; text-wrap: pretty; }
+.hero-txt .lede { margin: 22px 0 0; max-width: 30em; color: var(--ink-2) !important; font-size: 16px; }
 /* 주장 다이어그램은 히어로 옆이 아니라 아래 한 판으로 — 읽히라고 그린 그림이다 */
 .hero-graphic { align-self: center; }
-.diagram-band { border-top: 1px solid var(--rule-2); }
-.diagram-band .grid { padding-top: 44px; padding-bottom: 44px; }
-.diagram { display: grid; grid-template-columns: 148px minmax(0, 1fr); gap: 40px; align-items: center; }
-.diagram .tl { max-width: 720px; margin: 0 auto; }
-.diagram .label { padding-top: 6px; }
 
 .metrics { border-top: 1px solid var(--rule-2); border-bottom: 1px solid var(--rule-2); }
 .metrics .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
@@ -365,11 +362,11 @@ footer.site { border-top: 1px solid var(--rule); padding: 40px 0 64px; font-size
 @media (max-width: 1080px) {
   .col-6 { grid-column: 1 / -1; }
   .hero-band .grid { min-height: 0; }
-  .hero-txt { padding: 28px 0 40px; }
+  .hero-txt { padding: 48px 0 24px; }
   .metrics .grid { grid-template-columns: 1fr 1fr; }
   .metric + .metric { border-left: 0; padding-left: 0; }
   .metric:nth-child(n+3) { border-top: 1px solid var(--rule); }
-  .gutter, .diagram { grid-template-columns: 1fr; gap: 14px; }
+  .gutter { grid-template-columns: 1fr; gap: 14px; }
   .dec { grid-template-columns: 1fr; gap: 8px; }
   .dec .n { letter-spacing: .14em; }
 }
