@@ -34,6 +34,14 @@ function Console() {
   const selected = s.reports.find((r) => r.id === s.selected) ?? null;
   const j = selected ? judge(selected, s.reports, s.policies) : null;
 
+  // 토스트는 3초 뒤 스스로 사라진다 — 확인을 요구하지 않는 알림이라 손을 뺏지 않는다
+  const toastText = s.toast?.text ?? null;
+  useEffect(() => {
+    if (!toastText) return;
+    const id = setTimeout(() => d({ t: 'toast', text: null }), 3000);
+    return () => clearTimeout(id);
+  }, [toastText, d]);
+
   return (
     <div className="shell">
       <TopNavigation
@@ -60,7 +68,7 @@ function Console() {
 
       {dialog === 'confirm' && selected && j && (
         <div className="scrim" onClick={() => setDialog(null)}><Scrim />
-          <div onClick={(e) => e.stopPropagation()}>
+          <div className="dialog-layer" onClick={(e) => e.stopPropagation()}>
             <Popup
               title={j.amount === 0 ? `${j.outcome} · 0원으로 확정` : `지급 확정 — ${won(j.amount)}원`}
               onClose={() => setDialog(null)}
@@ -82,7 +90,7 @@ function Console() {
 
       {dialog === 'supplement' && selected && (
         <div className="scrim" onClick={() => setDialog(null)}><Scrim />
-          <div onClick={(e) => e.stopPropagation()}>
+          <div className="dialog-layer" onClick={(e) => e.stopPropagation()}>
             <Popup title="보완 요청" onClose={() => setDialog(null)}
               footer={
                 <>

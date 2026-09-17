@@ -75,7 +75,22 @@ main { padding: var(--iris-space-24); }
 .history-list { display: grid; gap: var(--iris-space-2); }
 
 .scrim { position: fixed; inset: 0; display: grid; place-items: center; z-index: 50; padding: var(--iris-space-24); }
-.toast-slot { position: fixed; right: var(--iris-space-24); bottom: var(--iris-space-24); z-index: 60; cursor: pointer; }
+/* Scrim은 absolute, 다이얼로그 래퍼는 static이라 z-index가 없으면 Scrim이 위에 깔린다.
+   반투명이라 눈에는 멀쩡해 보이지만 클릭이 전부 Scrim에 먹혀 확정이 되지 않았다. */
+.dialog-layer { position: relative; z-index: 1; }
+/* 하단 중앙 — 우하단은 오른쪽 판정 패널과 겹쳐 방금 누른 버튼을 가린다 */
+.toast-slot {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: var(--iris-space-24); z-index: 60; cursor: pointer;
+  animation: toast-in 120ms ease-out;
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast-slot { animation: none; }
+}
 
 @media (max-width: 1439px) {
   .workspace { grid-template-columns: 440px minmax(0, 1fr); }
