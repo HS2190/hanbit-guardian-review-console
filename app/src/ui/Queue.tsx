@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Card, ContentBadge, FallbackView, FilterButton, ListCell, SearchField, Table, TextButton } from '@hs2190.an/iris-react';
+import { Button, Card, ContentBadge, FallbackView, FilterButton, ListCell, SearchField, Table, TextButton } from '@hs2190.an/iris-react';
 import { useStore } from '../store/store';
 import { appliedPolicy, currentPolicy } from '../domain/policy';
 import { blockingPredecessor } from '../domain/rules';
@@ -50,8 +50,16 @@ export function Queue({ children }: { children: React.ReactNode }) {
 
       {rows.length === 0 ? (
         <div className="list full">
+          {/* 지우는 방법을 글로만 알리고 지울 수단을 주지 않으면 안내가 아니다.
+              칩은 그대로 남겨 무엇 때문에 0건인지 보이게 한다. */}
           <FallbackView icon="search" title="조건에 맞는 건이 없습니다"
-            description="필터나 검색어를 지우면 전체가 보입니다." />
+            description="필터나 검색어를 지우면 전체가 보입니다."
+            action={(
+              <Button size="m" variant="outlined" color="assistive"
+                onClick={() => { d({ t: 'filter', v: null }); d({ t: 'query', v: '' }); }}>
+                필터 지우기
+              </Button>
+            )} />
         </div>
       ) : selected ? (
         <div className="workspace">
