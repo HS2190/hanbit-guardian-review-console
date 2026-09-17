@@ -14,11 +14,15 @@ const DEFECTS: DefectType[] = ['유통기한 경과', '가격표 오류', '파�
  */
 function PolicyHistory() {
   const { s } = useStore();
-  const versions = [...s.policies].sort(
+  // 종료 시각은 시간순으로 계산하고(다음 버전의 발효가 이 버전의 끝이다),
+  // 보여줄 때만 뒤집는다 — 최신이 위. 순서를 바꿔도 기간 계산은 흔들리지 않는다.
+  const asc = [...s.policies].sort(
     (a, b) => Date.parse(a.effectiveFrom) - Date.parse(b.effectiveFrom));
+  const endsAt = new Map(asc.map((p, i) => [p.version, asc[i + 1]?.effectiveFrom]));
+  const versions = [...asc].reverse();
 
-  const items = versions.map((p, i) => {
-    const until = versions[i + 1]?.effectiveFrom;
+  const items = versions.map((p) => {
+    const until = endsAt.get(p.version);
     return {
       id: p.version,
       title: (
