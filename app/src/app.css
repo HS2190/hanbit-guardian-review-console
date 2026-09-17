@@ -129,13 +129,16 @@ main { padding: var(--iris-space-24); }
   .app-shell .queue-page { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
   .app-shell .page-head, .app-shell .counters { flex: 0 0 auto; }
   .app-shell .workspace { flex: 1 1 auto; min-height: 0; }
-  .app-shell .list, .app-shell .preview { max-height: 100%; overflow: auto; }
+  .app-shell .list, .app-shell .preview, .app-shell .queue-rail { max-height: 100%; overflow: auto; }
   .app-shell .preview { min-height: 0; }
+  /* 레일 머리는 스크롤에서 빠져 있어야 건수와 「목록 펼치기」가 늘 보인다 */
+  .app-shell .queue-rail-head { position: sticky; top: 0; z-index: 1;
+    background: var(--iris-semantic-background-normal-normal); }
   /* 스크롤 영역을 containing block으로 만든다.
      Iris 라디오·체크박스는 스크린 리더용 1px input을 position:absolute로 숨기는데,
      조상에 positioned가 없으면 그 1px이 html 기준으로 배치돼 스크롤 영역을 탈출한다.
      그러면 문서만 257px 길어져 바깥 스크롤이 생기고, 앱 아래로 캔버스(#0A0B0D)가 드러났다. */
-  .app-shell .list, .app-shell .preview { position: relative; }
+  .app-shell .list, .app-shell .preview, .app-shell .queue-rail { position: relative; }
 }
 
 /* Iris Table의 td·th만 타이포 클래스를 쓰지 않아 keep-all이 빠져 있다
