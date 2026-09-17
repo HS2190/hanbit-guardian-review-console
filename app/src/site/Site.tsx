@@ -140,7 +140,7 @@ export function Screens() {
     <section className="band">
       <div className="grid">
         <div className="col-4"><span className="label">화면</span><h2>무엇을 보면 되는가</h2>
-          <p>아래 아홉 장은 배포된 프로토타입에서 그대로 찍은 것입니다. 눌러서 크게 볼 수 있습니다. 전체 화면 서른세 장과 설계 정본은 Figma에 있습니다.</p>
+          <p>아래 아홉 장은 배포된 프로토타입에서 그대로 찍은 것입니다. 눌러서 크게 볼 수 있습니다. 전체 화면 서른아홉 장과 설계 정본은 Figma에 있습니다.</p>
           <a className="cta ghost" href={FIGMA} target="_blank" rel="noreferrer">Figma에서 전체 보기 ↗</a>
         </div>
         <div className="col-7">
