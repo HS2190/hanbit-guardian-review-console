@@ -72,10 +72,10 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
       <section className="band">
         <div className="grid">
           <Reveal className="col-12 move gutter">
-            <span className="label">한 수</span>
+            <span className="label">설계 원칙</span>
             <div>
               <q>적용 정책은 <em>접수 시각의 발효 버전</em>으로 정해지고, 심사자는 그것을 선택할 수 없다.</q>
-              <p>심사자에게 재량을 더 주는 대신 선택지를 없앴습니다. 오류의 원인이 부주의가 아니라 선택지의 존재라고 봤기 때문입니다.</p>
+              <p>심사자에게 재량을 더 주는 대신 적용 정책을 고를 여지를 없앴습니다. 오류의 원인이 부주의가 아니라 선택지의 존재라고 봤기 때문입니다.</p>
             </div>
           </Reveal>
           <Reveal className="col-12 gutter shot-gap" stagger={false}>
