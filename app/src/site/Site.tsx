@@ -114,7 +114,7 @@ export function Overview({ go }: { go: (r: Route, slug?: string) => void }) {
             <div className="try-cards stg">
               <div className="mini"><b>접수 시각이 기준이라는 것</b><span>#1042는 9/15 09:47 접수라 v1의 30,000원이 적용된다. 36분 뒤 v2가 발효했지만 이 건은 바뀌지 않는다.</span></div>
               <div className="mini"><b>선행 건이 막는다는 것</b><span>#1063은 같은 고객의 #1042가 미판정이라 확정이 막혀 있다. #1042를 확정하면 잔여 한도로 열린다.</span></div>
-              <div className="mini"><b>순서가 결과를 정한다는 것</b><span>#1121은 접수 당시 대상 밖(비식품)이라 증빙을 보지 않고 범위 외로 끝난다. 심사 착수를 누르면 버튼이 「범위 외 · 0원으로 확정」으로 바뀐다.</span></div>
+              <div className="mini"><b>판정 순서가 고정이라는 것</b><span>#1121은 접수 당시 대상 밖(비식품)이라 증빙을 보지 않고 범위 외로 끝난다. 심사 착수를 누르면 버튼이 「범위 외 · 0원으로 확정」으로 바뀐다.</span></div>
             </div>
             <div className="cta-row"><a className="cta" href="#/app" onClick={(e) => { e.preventDefault(); go('app'); }}>프로토타입 열기</a></div>
           </Reveal>
