@@ -125,11 +125,30 @@ function Console() {
   );
 }
 
+/**
+ * GA4 는 pushState·replaceState 만 감시한다. 이 사이트는 location.hash 로 이동하므로
+ * 라우트 전환이 잡히지 않고, 모든 방문이 첫 화면 하나로 뭉친다. 해시가 바뀔 때 직접 보낸다.
+ */
+type Gtag = (cmd: 'event', name: string, params?: Record<string, unknown>) => void;
+function sendPageView(route: Route, slug: string) {
+  const g = (window as unknown as { gtag?: Gtag }).gtag;
+  if (!g) return;
+  g('event', 'page_view', {
+    page_location: location.href,
+    page_title: `한빛마트 지킴이 · ${route}${slug ? `/${slug}` : ''}`,
+  });
+}
+
 function Site() {
   const [{ route, slug }, setNav] = useState(readHash);
 
   useEffect(() => {
-    const on = () => { setNav(readHash()); window.scrollTo(0, 0); };
+    const on = () => {
+      const next = readHash();
+      setNav(next);
+      window.scrollTo(0, 0);
+      sendPageView(next.route, next.slug);
+    };
     window.addEventListener('hashchange', on);
     return () => window.removeEventListener('hashchange', on);
   }, []);
