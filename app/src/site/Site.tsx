@@ -6,6 +6,7 @@ import { Lightbox } from './Lightbox';
 import { HeroTimeline } from './HeroTimeline';
 
 const FIGMA = 'https://www.figma.com/design/riBWYMkoDYOWaRlTkggqnK/';
+const PDF = 'https://drive.google.com/file/d/1z5vcOt0xIOFFnKttA5e80TQdoI_eK8vE/view';
 
 export type Route = 'overview' | 'screens' | 'docs' | 'app';
 
@@ -21,6 +22,7 @@ export function Nav({ route, go, doc }: { route: Route; go: (r: Route, slug?: st
         {item('overview', '개요')}{item('docs', '문서')}{item('screens', '화면')}{item('app', '프로토타입')}
         <span className="right">
           <a href={FIGMA} target="_blank" rel="noreferrer">Figma ↗</a>
+          <a href={PDF} target="_blank" rel="noreferrer">PDF ↗</a>
         </span>
       </div>
       {doc && <span hidden>{doc}</span>}
