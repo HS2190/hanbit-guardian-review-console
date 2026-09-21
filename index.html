@@ -16,9 +16,11 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'G-S9HF9SKHP0');
+      // 해시 라우팅이라 자동 page_view 는 진입 화면 하나만 잡고 나머지를 뭉뚱그린다.
+      // 진입 화면까지 앱(src/site/analytics.ts)에서 라우트를 실어 직접 보낸다.
+      gtag('config', 'G-S9HF9SKHP0', { send_page_view: false });
     </script>
-    <script type="module" crossorigin src="/hanbit-guardian-review-console/assets/index-D_4lD3cV.js"></script>
+    <script type="module" crossorigin src="/hanbit-guardian-review-console/assets/index-CSd0JSC7.js"></script>
     <link rel="stylesheet" crossorigin href="/hanbit-guardian-review-console/assets/index-C2GvMez4.css">
   </head>
   <body>
