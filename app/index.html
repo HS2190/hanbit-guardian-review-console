@@ -16,7 +16,9 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'G-S9HF9SKHP0');
+      // 해시 라우팅이라 자동 page_view 는 진입 화면 하나만 잡고 나머지를 뭉뚱그린다.
+      // 진입 화면까지 앱(src/site/analytics.ts)에서 라우트를 실어 직접 보낸다.
+      gtag('config', 'G-S9HF9SKHP0', { send_page_view: false });
     </script>
   </head>
   <body>

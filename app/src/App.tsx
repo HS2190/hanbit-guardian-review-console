@@ -9,6 +9,7 @@ import { won } from './ui/bits';
 import './app.css';
 import './site/theme.css';
 import { Docs, Footer, Nav, Overview, Rails, Screens, type Route } from './site/Site';
+import { startEngagementTracking, trackFirstPageView, trackPageView } from './site/analytics';
 
 type Tab = '심사 큐' | '정책';
 
@@ -125,29 +126,22 @@ function Console() {
   );
 }
 
-/**
- * GA4 는 pushState·replaceState 만 감시한다. 이 사이트는 location.hash 로 이동하므로
- * 라우트 전환이 잡히지 않고, 모든 방문이 첫 화면 하나로 뭉친다. 해시가 바뀔 때 직접 보낸다.
- */
-type Gtag = (cmd: 'event', name: string, params?: Record<string, unknown>) => void;
-function sendPageView(route: Route, slug: string) {
-  const g = (window as unknown as { gtag?: Gtag }).gtag;
-  if (!g) return;
-  g('event', 'page_view', {
-    page_location: location.href,
-    page_title: `한빛마트 지킴이 · ${route}${slug ? `/${slug}` : ''}`,
-  });
-}
-
 function Site() {
   const [{ route, slug }, setNav] = useState(readHash);
+
+  // 진입 화면도 여기서 보고한다 — index.html 에서 자동 page_view 를 껐다
+  useEffect(() => {
+    const first = readHash();
+    trackFirstPageView(first.route, first.slug);
+    return startEngagementTracking();
+  }, []);
 
   useEffect(() => {
     const on = () => {
       const next = readHash();
       setNav(next);
       window.scrollTo(0, 0);
-      sendPageView(next.route, next.slug);
+      trackPageView(next.route, next.slug);
     };
     window.addEventListener('hashchange', on);
     return () => window.removeEventListener('hashchange', on);
