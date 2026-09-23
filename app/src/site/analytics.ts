@@ -40,6 +40,19 @@ let shownAt = 0;
 let reportedMs = 0;
 /** 이미 보낸 문턱 */
 const passed = new Set<number>();
+/**
+ * 지금 보고 있는 화면의 보고용 URL·제목.
+ * read_* 이벤트는 page_location 을 싣지 않으면 gtag config 의 최초 URL(진입 주소)로 뭉뚱그려져
+ * "어느 화면을 오래 봤는지"가 사라진다. 그래서 화면이 바뀔 때마다 여기 붙들어 두고 같이 싣는다.
+ * (2026-09-23 첫 외부 방문의 read_10s 가 실제로 진입 주소에 붙어 어느 화면인지 읽히지 않았다.)
+ */
+let currentUrl = '';
+let currentTitle = '';
+
+/** read_* 이벤트에 실을 화면 정보. 첫 page_view 전이라면 비워 둔다 — GA4 기본값이 쓰인다 */
+function screenParams(): Record<string, string> {
+  return currentUrl ? { page_location: currentUrl, page_title: currentTitle } : {};
+}
 
 function viewedMs(): number {
   return visibleMs + (shownAt ? Date.now() - shownAt : 0);
@@ -59,7 +72,7 @@ function flush(): void {
   if (!g) return;
   const delta = takeEngagementDelta();
   if (delta < MIN_FLUSH_MS) return;
-  g('event', 'read_flush', { engagement_time_msec: delta });
+  g('event', 'read_flush', { ...screenParams(), engagement_time_msec: delta });
 }
 
 function checkMarks(): void {
@@ -69,7 +82,7 @@ function checkMarks(): void {
   for (const m of MARKS) {
     if (seconds < m || passed.has(m)) continue;
     passed.add(m);
-    g('event', `read_${m}s`, { engagement_time_msec: takeEngagementDelta() });
+    g('event', `read_${m}s`, { ...screenParams(), engagement_time_msec: takeEngagementDelta() });
   }
 }
 
@@ -96,24 +109,30 @@ function reportUrl(route: string, slug: string): string {
   return `${location.origin}${location.pathname}?${q.toString()}${location.hash}`;
 }
 
+/** 보고용 화면 제목. 정적 문서 제목으로 뭉치지 않도록 page_view·read_* 가 같은 값을 쓴다 */
+function reportTitle(route: string, slug: string): string {
+  return `한빛마트 지킴이 · ${route}${slug ? `/${slug}` : ''}`;
+}
+
 /**
  * 화면 하나의 조회를 보고한다. 진입 시 1회, 해시가 바뀔 때마다 1회.
  * index.html 에서 send_page_view 를 껐으므로 첫 화면도 여기서 보내야 한다.
  */
 export function trackPageView(route: string, slug: string): void {
-  // 이전 화면의 남은 참여시간을 먼저 정산한다 (카운터를 리셋하기 전에)
+  // 이전 화면의 남은 참여시간을 먼저 정산한다 (카운터와 currentUrl 을 갈아끼우기 전에).
+  // 이 시점엔 해시가 이미 새 화면으로 바뀌어 있으므로, 붙들어 둔 이전 URL 로만 올바르게 귀속된다.
   flush();
   visibleMs = 0;
   shownAt = document.visibilityState === 'visible' ? Date.now() : 0;
   reportedMs = 0;
   passed.clear();
 
+  currentUrl = reportUrl(route, slug);
+  currentTitle = reportTitle(route, slug);
+
   const g = gtag();
   if (!g) return;
-  g('event', 'page_view', {
-    page_location: reportUrl(route, slug),
-    page_title: `한빛마트 지킴이 · ${route}${slug ? `/${slug}` : ''}`,
-  });
+  g('event', 'page_view', { page_location: currentUrl, page_title: currentTitle });
 }
 
 let firstSent = false;

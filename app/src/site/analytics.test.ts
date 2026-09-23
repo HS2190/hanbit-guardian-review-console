@@ -190,3 +190,60 @@ describe('참여시간', () => {
     stop();
   });
 });
+
+describe('화면 귀속', () => {
+  it('문턱 이벤트가 지금 보고 있는 화면을 싣는다', async () => {
+    setup('#/docs/03-rules');
+    const { trackFirstPageView, startEngagementTracking } = await freshModule();
+    trackFirstPageView('docs', '03-rules');
+    const stop = startEngagementTracking();
+
+    vi.advanceTimersByTime(11_000);
+
+    // 싣지 않으면 GA4 가 진입 주소로 뭉뚱그려 어느 화면을 오래 봤는지 사라진다
+    const [mark] = events('read_10s');
+    expect(mark[2]?.page_location).toBe(
+      'https://hs2190.github.io/hanbit-guardian-review-console/?route=docs&slug=03-rules#/docs/03-rules',
+    );
+    expect(mark[2]?.page_title).toBe('한빛마트 지킴이 · docs/03-rules');
+
+    stop();
+  });
+
+  it('화면 전환 시 정산은 떠나는 화면에 귀속된다', async () => {
+    setup('#/overview');
+    const { trackFirstPageView, trackPageView, startEngagementTracking } = await freshModule();
+    trackFirstPageView('overview', '');
+    const stop = startEngagementTracking();
+
+    vi.advanceTimersByTime(45_000);
+    // 라우터가 해시를 먼저 바꾸고 나서 보고한다 — 그래도 읽은 시간은 이전 화면 몫이다
+    (location as unknown as { hash: string }).hash = '#/docs/03-rules';
+    trackPageView('docs', '03-rules');
+
+    const [flush] = events('read_flush');
+    expect(flush[2]?.page_location).toBe(
+      'https://hs2190.github.io/hanbit-guardian-review-console/?route=overview#/overview',
+    );
+    expect(flush[2]?.page_title).toBe('한빛마트 지킴이 · overview');
+
+    stop();
+  });
+
+  it('탭이 숨을 때의 정산도 그 화면에 귀속된다', async () => {
+    setup('#/screens');
+    const { trackFirstPageView, startEngagementTracking } = await freshModule();
+    trackFirstPageView('screens', '');
+    const stop = startEngagementTracking();
+
+    vi.advanceTimersByTime(5_000);
+    (document as unknown as { visibilityState: string }).visibilityState = 'hidden';
+    listeners.visibilitychange();
+
+    expect(events('read_flush')[0][2]?.page_location).toBe(
+      'https://hs2190.github.io/hanbit-guardian-review-console/?route=screens#/screens',
+    );
+
+    stop();
+  });
+});
